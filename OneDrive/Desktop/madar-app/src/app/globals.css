@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #FF8A3D;
+  --primary-dk: #C04010;
+  --cream: #FFF6E9;
+  --cream-md: #FFE8CC;
+  --cream-dk: #FFD89E;
+  --text-main: #3A2210;
+  --text-muted: #7A5A38;
+  --track: #FFE3D6;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  direction: rtl;
+}
+
+body {
+  font-family: 'Tajawal', 'Cairo', system-ui, sans-serif;
+  color: var(--text-main);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+}
