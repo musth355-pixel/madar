@@ -1,204 +1,245 @@
 export const MATH_G2_LESSONS: Record<string, {
-  title: string;
-  subject: string;
-  subjectColor: string;
-  icon: string;
-  xp: number;
-  steps: {
-    type: "intro" | "explain" | "example" | "practice" | "done";
-    title?: string;
-    body?: string;
-    visual?: React.ReactNode;
-    question?: string;
-    options?: string[];
-    correct?: number;
-    hint?: string;
-  }[];
+  title: string; subject: string; subjectColor: string; icon: string; xp: number;
+  steps: { type: "intro"|"explain"|"example"|"practice"|"done"; title?: string; body?: string; visual?: React.ReactNode; question?: string; options?: string[]; correct?: number; hint?: string; }[];
 }> = {
+
+  /* ══════ الوحدة الأولى: الأعداد حتى ٩٩٩ ══════ */
   "u1-l1": {
-    title: "قراءة الأعداد حتى ٩٩٩",
-    subject: "الرياضيات",
-    subjectColor: "#FF8A3D",
-    icon: "🔢",
-    xp: 20,
+    title: "قراءة الأعداد حتى ٩٩٩", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔢", xp: 20,
     steps: [
-      {
-        type: "intro",
-        body: "سنتعلم اليوم كيف نقرأ ونكتب الأعداد الكبيرة حتى ٩٩٩. هيا نبدأ!",
+      { type: "intro", body: "سنتعلم اليوم كيف نقرأ ونكتب الأعداد الكبيرة حتى ٩٩٩. هيا نبدأ!" },
+      { type: "explain", title: "منازل الأعداد", body: "كل عدد له منازل:\n🟠 الآحاد — الرقم الأول من اليمين\n🔵 العشرات — الرقم الثاني من اليمين\n🟢 المئات — الرقم الثالث من اليمين",
+        visual: (<div className="flex gap-4 text-center font-black text-2xl justify-center">{[["٣","مئات","#4FB286"],["٤","عشرات","#5BA3D9"],["٧","آحاد","#FF8A3D"]].map(([v,l,c])=>(<div key={l}><div className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-3xl" style={{background:c}}>{v}</div><div className="text-xs mt-1" style={{color:c}}>{l}</div></div>))}</div>),
       },
-      {
-        type: "explain",
-        title: "منازل الأعداد",
-        body: "كل عدد له منازل:\n🟠 الآحاد: الرقم الأول من اليمين\n🔵 العشرات: الرقم الثاني من اليمين\n🟢 المئات: الرقم الثالث من اليمين",
-        visual: (
-          <div className="flex gap-4 text-center font-black text-2xl">
-            <div>
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-3xl" style={{ background: "#4FB286" }}>٣</div>
-              <div className="text-xs mt-1" style={{ color: "#4FB286" }}>مئات</div>
-            </div>
-            <div>
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-3xl" style={{ background: "#5BA3D9" }}>٤</div>
-              <div className="text-xs mt-1" style={{ color: "#5BA3D9" }}>عشرات</div>
-            </div>
-            <div>
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-3xl" style={{ background: "#FF8A3D" }}>٧</div>
-              <div className="text-xs mt-1" style={{ color: "#FF8A3D" }}>آحاد</div>
-            </div>
-          </div>
-        ),
-      },
-      {
-        type: "example",
-        title: "مثال: العدد ٣٤٧",
-        body: "العدد ٣٤٧ يُقرأ: ثلاثمئة وسبعة وأربعون\n• ٣ في منزلة المئات = ٣٠٠\n• ٤ في منزلة العشرات = ٤٠\n• ٧ في منزلة الآحاد = ٧",
-        visual: (
-          <div className="flex gap-3 text-center">
-            {[["٣٠٠","مئات","#4FB286"],["٤٠","عشرات","#5BA3D9"],["٧","آحاد","#FF8A3D"]].map(([v,l,c])=>(
-              <div key={l}>
-                <div className="px-4 py-3 rounded-xl font-black text-2xl text-white" style={{background:c}}>{v}</div>
-                <div className="text-xs mt-1 font-bold" style={{color:c}}>{l}</div>
-              </div>
-            ))}
-          </div>
-        ),
-      },
-      {
-        type: "practice",
-        question: "كم عدد المئات في العدد ٥٦٨؟",
-        options: ["٦", "٥", "٨", "٥٦"],
-        correct: 1,
-        hint: "المئات هي الرقم الثالث من اليمين",
-      },
-      {
-        type: "practice",
-        question: "ما قيمة الرقم ٤ في العدد ٤٢٩؟",
-        options: ["٤", "٤٠", "٤٠٠", "٢٩"],
-        correct: 2,
-        hint: "الرقم ٤ في منزلة المئات، إذن قيمته ٤٠٠",
-      },
-      {
-        type: "practice",
-        question: "أي عدد يُقرأ: مئتان وخمسة وثلاثون؟",
-        options: ["٢٣٥", "٣٢٥", "٢٥٣", "٥٢٣"],
-        correct: 0,
-        hint: "مئتان = ٢٠٠، وثلاثون = ٣٠، وخمسة = ٥",
-      },
-      {
-        type: "done",
-      },
+      { type: "practice", question: "كم عدد المئات في العدد ٥٦٨؟", options: ["٦","٥","٨","٥٦"], correct: 1, hint: "المئات هي الرقم الثالث من اليمين" },
+      { type: "practice", question: "ما قيمة الرقم ٤ في العدد ٤٢٩؟", options: ["٤","٤٠","٤٠٠","٢٩"], correct: 2, hint: "الرقم ٤ في منزلة المئات قيمته ٤٠٠" },
+      { type: "practice", question: "أي عدد يُقرأ: مئتان وخمسة وثلاثون؟", options: ["٢٣٥","٣٢٥","٢٥٣","٥٢٣"], correct: 0, hint: "مئتان=٢٠٠ + ثلاثون=٣٠ + خمسة=٥" },
+      { type: "done" },
+    ],
+  },
+  "u1-l2": {
+    title: "كتابة الأعداد بالأرقام والكلمات", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔢", xp: 20,
+    steps: [
+      { type: "intro", body: "سنتعلم كيف نكتب الأعداد بالأرقام وبالكلمات!" },
+      { type: "explain", title: "الأعداد بالكلمات", body: "٣٤٥ = ثلاثمئة وخمسة وأربعون\n٢٠٠ = مئتان\n٧٨٠ = سبعمئة وثمانون\n٩٩٩ = تسعمئة وتسعة وتسعون\n\nالقاعدة: نبدأ بالمئات ثم العشرات ثم الآحاد" },
+      { type: "practice", question: "كيف نكتب العدد ٦٢٣ بالكلمات؟", options: ["ستمئة وثلاثة وعشرون","ستة وعشرون","ستمئة واثنان وثلاثون","ثلاثة وعشرون"], correct: 0, hint: "٦٠٠+٢٠+٣ = ستمئة وثلاثة وعشرون" },
+      { type: "practice", question: "ما الرقم الذي يمثل: أربعمئة وأحد عشر؟", options: ["٤١١","١١٤","٤٠١","١٤١"], correct: 0, hint: "أربعمئة=٤٠٠ + أحد عشر=١١" },
+      { type: "practice", question: "كيف تكتب: تسعمئة وتسعة بالأرقام؟", options: ["٩٠٩","٩٩٩","٩٩٠","٩٠٠"], correct: 0, hint: "تسعمئة=٩٠٠ + تسعة=٩" },
+      { type: "done" },
+    ],
+  },
+  "u1-l3": {
+    title: "مقارنة الأعداد وترتيبها", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔢", xp: 20,
+    steps: [
+      { type: "intro", body: "سنتعلم مقارنة الأعداد باستخدام رموز > و < و =" },
+      { type: "explain", title: "رموز المقارنة", body: "> يعني: أكبر من\n< يعني: أصغر من\n= يعني: يساوي\n\nأمثلة:\n٥٦٧ > ٤٣٢ (٥٦٧ أكبر من ٤٣٢)\n٣١٠ < ٨٩٩ (٣١٠ أصغر من ٨٩٩)\n٢٢٢ = ٢٢٢\n\nنقارن من اليسار: نبدأ بالمئات ثم العشرات ثم الآحاد" },
+      { type: "practice", question: "أيٌّ من الإشارات يكمل: ٧٤٢ ___ ٧٢٨؟", options: [">","<","=","لا شيء"], correct: 0, hint: "العشرات: ٤ > ٢ لذا ٧٤٢ أكبر" },
+      { type: "practice", question: "رتّب تصاعدياً: ٣٤٥ — ٢١٠ — ٤٨٦", options: ["٢١٠ ← ٣٤٥ ← ٤٨٦","٤٨٦ ← ٣٤٥ ← ٢١٠","٣٤٥ ← ٢١٠ ← ٤٨٦","٢١٠ ← ٤٨٦ ← ٣٤٥"], correct: 0, hint: "تصاعدي = من الأصغر إلى الأكبر" },
+      { type: "practice", question: "أيٌّ من الأعداد أكبر؟", options: ["٨٩٩","٨٩٠","٨٠٩","٨٠٠"], correct: 0, hint: "قارن الآحاد: ٩ > ٠" },
+      { type: "done" },
+    ],
+  },
+  "u1-l4": {
+    title: "قيمة المنزلة", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔢", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم قيمة كل رقم حسب مكانه في العدد!" },
+      { type: "explain", title: "قيمة المنزلة", body: "في العدد ٤٧٢:\n• الرقم ٤ في منزلة المئات → قيمته ٤٠٠\n• الرقم ٧ في منزلة العشرات → قيمته ٧٠\n• الرقم ٢ في منزلة الآحاد → قيمته ٢\n\n٤٧٢ = ٤٠٠ + ٧٠ + ٢" },
+      { type: "practice", question: "ما قيمة الرقم ٦ في العدد ٦٣١؟", options: ["٦٠٠","٦","٦٠","٦٠٠٠"], correct: 0, hint: "٦ في منزلة المئات = ٦٠٠" },
+      { type: "practice", question: "العدد ٣٨٥ = ___؟", options: ["٣٠٠+٨٠+٥","٣٠٠+٨+٥","٣٠+٨٠+٥","٣+٨+٥"], correct: 0, hint: "فكّك العدد حسب منازله" },
+      { type: "practice", question: "ما العدد الذي يمثل: ٢٠٠+٤٠+٧؟", options: ["٢٤٧","٢٧٤","٤٢٧","٧٤٢"], correct: 0, hint: "مئتان وأربعون وسبعة = ٢٤٧" },
+      { type: "done" },
     ],
   },
 
+  /* ══════ الوحدة الثانية: الجمع ══════ */
   "u2-l6": {
-    title: "الجمع بدون حمل",
-    subject: "الرياضيات",
-    subjectColor: "#FF8A3D",
-    icon: "➕",
-    xp: 20,
+    title: "الجمع بدون حمل", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "➕", xp: 20,
     steps: [
-      {
-        type: "intro",
-        body: "سنتعلم جمع الأعداد ذات الثلاثة أرقام بدون حمل. الأمر سهل!",
+      { type: "intro", body: "سنتعلم جمع الأعداد ذات الثلاثة أرقام بدون حمل. الأمر سهل!" },
+      { type: "explain", title: "طريقة الجمع بالعمود", body: "نرتّب الأعداد في عمود:\n• الآحاد تحت الآحاد\n• العشرات تحت العشرات\n• المئات تحت المئات\n\nثم نجمع من اليمين إلى اليسار.",
+        visual: (<div className="font-mono text-2xl font-black text-center space-y-1 dir-ltr"><div className="flex justify-end gap-3 pr-4"><span style={{color:"#4FB286"}}>٢</span><span style={{color:"#5BA3D9"}}>٣</span><span style={{color:"#FF8A3D"}}>٤</span></div><div className="flex justify-end gap-3 pr-4"><span>+</span><span style={{color:"#4FB286"}}>١</span><span style={{color:"#5BA3D9"}}>٥</span><span style={{color:"#FF8A3D"}}>٢</span></div><div className="border-t-2 border-gray-400 pt-1 flex justify-end gap-3 pr-4"><span style={{color:"#4FB286"}}>٣</span><span style={{color:"#5BA3D9"}}>٨</span><span style={{color:"#FF8A3D"}}>٦</span></div></div>),
       },
-      {
-        type: "explain",
-        title: "طريقة الجمع بالعمود",
-        body: "نرتّب الأعداد في عمود:\n• الآحاد تحت الآحاد\n• العشرات تحت العشرات\n• المئات تحت المئات\n\nثم نجمع من اليمين إلى اليسار.",
-        visual: (
-          <div className="font-mono text-2xl font-black text-center space-y-1">
-            <div className="flex justify-end gap-3 pr-4">
-              <span style={{color:"#4FB286"}}>٢</span>
-              <span style={{color:"#5BA3D9"}}>٣</span>
-              <span style={{color:"#FF8A3D"}}>٤</span>
-            </div>
-            <div className="flex justify-end gap-3 pr-4">
-              <span>+</span>
-              <span style={{color:"#4FB286"}}>١</span>
-              <span style={{color:"#5BA3D9"}}>٥</span>
-              <span style={{color:"#FF8A3D"}}>٢</span>
-            </div>
-            <div className="border-t-2 border-gray-400 pt-1 flex justify-end gap-3 pr-4">
-              <span style={{color:"#4FB286"}}>٣</span>
-              <span style={{color:"#5BA3D9"}}>٨</span>
-              <span style={{color:"#FF8A3D"}}>٦</span>
-            </div>
-          </div>
-        ),
-      },
-      {
-        type: "practice",
-        question: "كم يساوي ٢٣١ + ١٥٤؟",
-        visual: (
-          <div className="font-mono text-2xl font-black text-center space-y-1">
-            <div>٢٣١</div>
-            <div>+ ١٥٤</div>
-            <div className="border-t-2 border-gray-400 pt-1">؟</div>
-          </div>
-        ),
-        options: ["٣٨٥", "٣٩٥", "٣٧٥", "٤٨٥"],
-        correct: 0,
-        hint: "١+٤=٥ آحاد، ٣+٥=٨ عشرات، ٢+١=٣ مئات",
-      },
-      {
-        type: "practice",
-        question: "كم يساوي ٤٢٠ + ٣٥٣؟",
-        options: ["٧٦٣", "٧٧٣", "٨٦٣", "٧٥٣"],
-        correct: 1,
-        hint: "٠+٣=٣، ٢+٥=٧، ٤+٣=٧",
-      },
-      {
-        type: "practice",
-        question: "في المكتبة ١٢٣ كتاب للأطفال و٢٦١ كتاب للكبار. كم المجموع؟",
-        options: ["٣٧٤", "٣٨٤", "٤٧٤", "٣٦٤"],
-        correct: 1,
-        hint: "١٢٣ + ٢٦١ = ؟",
-      },
-      {
-        type: "done",
-      },
+      { type: "practice", question: "كم يساوي ٢٣١ + ١٥٤؟", options: ["٣٨٥","٣٩٥","٣٧٥","٤٨٥"], correct: 0, hint: "١+٤=٥، ٣+٥=٨، ٢+١=٣" },
+      { type: "practice", question: "كم يساوي ٤٢٠ + ٣٥٣؟", options: ["٧٦٣","٧٧٣","٨٦٣","٧٥٣"], correct: 1, hint: "٠+٣=٣، ٢+٥=٧، ٤+٣=٧" },
+      { type: "practice", question: "في المكتبة ١٢٣ كتاب للأطفال و٢٦١ كتاب للكبار. كم المجموع؟", options: ["٣٧٤","٣٨٤","٤٧٤","٣٦٤"], correct: 1, hint: "١٢٣ + ٢٦١ = ؟" },
+      { type: "done" },
+    ],
+  },
+  "u2-l7": {
+    title: "الجمع مع الحمل من الآحاد", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "➕", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم الجمع مع الحمل — عندما يتجاوز مجموع الآحاد ٩!" },
+      { type: "explain", title: "الحمل من الآحاد", body: "عندما يكون مجموع الآحاد أكبر من ٩:\n• نكتب الرقم الأيمن تحت الآحاد\n• نحمل الرقم الأيسر إلى العشرات\n\nمثال: ١٣٥ + ١١٧\n• ٥+٧=١٢ → نكتب ٢ ونحمل ١\n• ٣+١+١(محمول)=٥\n• ١+١=٢\n• النتيجة: ٢٥٢" },
+      { type: "practice", question: "كم يساوي ١٢٤ + ١٣٨؟", options: ["٢٦٢","٢٥٢","٢٧٢","٢٦٠"], correct: 0, hint: "٤+٨=١٢ → اكتب ٢ واحمل ١" },
+      { type: "practice", question: "كم يساوي ٢٤٦ + ١١٥؟", options: ["٣٦١","٣٥١","٣٧١","٣٦٠"], correct: 0, hint: "٦+٥=١١ → اكتب ١ واحمل ١" },
+      { type: "practice", question: "اشترى سالم ١١٧ بطاقة وعلي ١١٤ بطاقة. كم بطاقة عندهم معاً؟", options: ["٢٣١","٢٢١","٢٤١","٢٣٠"], correct: 0, hint: "١١٧ + ١١٤ = ؟" },
+      { type: "done" },
+    ],
+  },
+  "u2-l8": {
+    title: "الجمع مع الحمل من العشرات", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "➕", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم الحمل من العشرات إلى المئات!" },
+      { type: "explain", title: "الحمل من العشرات", body: "عندما يتجاوز مجموع العشرات ٩:\n• نكتب الرقم الأيمن في العشرات\n• نحمل الرقم الأيسر إلى المئات\n\nمثال: ١٦٢ + ١٥٣\n• ٢+٣=٥ آحاد\n• ٦+٥=١١ → نكتب ١ ونحمل ١\n• ١+١+١(محمول)=٣\n• النتيجة: ٣١٥" },
+      { type: "practice", question: "كم يساوي ١٧١ + ١٥٢؟", options: ["٣٢٣","٣١٣","٣٣٣","٣٢٠"], correct: 0, hint: "٧+٥=١٢ → اكتب ٢ واحمل ١" },
+      { type: "practice", question: "كم يساوي ٢٨٣ + ١٣١؟", options: ["٤١٤","٤٠٤","٤٢٤","٤١٠"], correct: 0, hint: "٨+٣=١١ → اكتب ١ واحمل ١" },
+      { type: "done" },
+    ],
+  },
+  "u2-l9": {
+    title: "مسائل الجمع الكلامية", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "📝", xp: 30,
+    steps: [
+      { type: "intro", body: "سنطبق الجمع على مسائل من الحياة اليومية!" },
+      { type: "explain", title: "خطوات حل المسألة الكلامية", body: "١. اقرأ المسألة جيداً\n٢. حدّد المعطيات (ما هو معطى)\n٣. حدّد المطلوب (ما الذي تبحث عنه)\n٤. اختر العملية المناسبة (جمع أو طرح)\n٥. احسب وتحقق من الإجابة" },
+      { type: "practice", question: "زرع مزارع ٢٤٣ شجرة نخيل و١٣٥ شجرة تفاح. كم شجرة زرع في المجموع؟", options: ["٣٧٨","٣٦٨","٣٨٨","٢٧٨"], correct: 0, hint: "٢٤٣ + ١٣٥ = ؟" },
+      { type: "practice", question: "في الملعب ١٥٦ طالب من الفصل الأول و١٣٢ من الفصل الثاني. كم الإجمالي؟", options: ["٢٨٨","٢٧٨","٢٩٨","٢٦٨"], correct: 0, hint: "١٥٦ + ١٣٢ = ؟" },
+      { type: "practice", question: "جمعت هند ٢١٨ طابعاً وأختها ١٦١ طابعاً. كم طابعاً جمعتا معاً؟", options: ["٣٧٩","٣٦٩","٣٨٩","٣٥٩"], correct: 0, hint: "٢١٨ + ١٦١ = ؟" },
+      { type: "done" },
     ],
   },
 
+  /* ══════ الوحدة الثالثة: الطرح ══════ */
   "u3-l11": {
-    title: "الطرح بدون استلاف",
-    subject: "الرياضيات",
-    subjectColor: "#FF8A3D",
-    icon: "➖",
-    xp: 20,
+    title: "الطرح بدون استلاف", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "➖", xp: 20,
     steps: [
-      {
-        type: "intro",
-        body: "سنتعلم طرح الأعداد الكبيرة خطوة بخطوة. هيا!",
+      { type: "intro", body: "سنتعلم طرح الأعداد الكبيرة خطوة بخطوة. هيا!" },
+      { type: "explain", title: "طريقة الطرح بالعمود", body: "نرتّب الأعداد في عمود ثم نطرح من اليمين:\n• نطرح الآحاد أولاً\n• ثم العشرات\n• ثم المئات",
+        visual: (<div className="font-mono text-2xl font-black text-center space-y-1"><div>٥٧٨</div><div>- ٢٣٤</div><div className="border-t-2 border-gray-400 pt-1">٣٤٤</div></div>),
       },
-      {
-        type: "explain",
-        title: "طريقة الطرح بالعمود",
-        body: "نرتّب الأعداد في عمود ثم نطرح من اليمين:\n• نطرح الآحاد أولاً\n• ثم العشرات\n• ثم المئات",
-        visual: (
-          <div className="font-mono text-2xl font-black text-center space-y-1">
-            <div>٥٧٨</div>
-            <div>- ٢٣٤</div>
-            <div className="border-t-2 border-gray-400 pt-1">٣٤٤</div>
-          </div>
-        ),
+      { type: "practice", question: "كم يساوي ٦٨٧ - ٣٤٢؟", options: ["٣٤٥","٣٣٥","٣٥٥","٤٤٥"], correct: 0, hint: "٧-٢=٥، ٨-٤=٤، ٦-٣=٣" },
+      { type: "practice", question: "كان معي ٨٩٥ ريال وأنفقت ٢٣١ ريال. كم تبقى؟", options: ["٦٥٤","٦٦٤","٦٤٤","٧٦٤"], correct: 1, hint: "٨٩٥ - ٢٣١ = ؟" },
+      { type: "done" },
+    ],
+  },
+  "u3-l12": {
+    title: "الطرح مع الاستلاف من العشرات", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "➖", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم الاستلاف عندما يكون رقم الآحاد أصغر من المطروح!" },
+      { type: "explain", title: "الاستلاف من العشرات", body: "عندما لا يمكن الطرح في الآحاد:\n• نستلف ١ من العشرات → تصبح الآحاد +١٠\n• العشرات تنقص بمقدار ١\n\nمثال: ٣٤٢ - ١١٥\n• ٢ - ٥ = ؟ لا يمكن! نستلف من العشرات\n• ١٢ - ٥ = ٧\n• (٤-١) - ١ = ٢\n• ٣ - ١ = ٢ → النتيجة: ٢٢٧" },
+      { type: "practice", question: "كم يساوي ٤٥٣ - ١٢٧؟", options: ["٣٢٦","٣١٦","٣٣٦","٢٢٦"], correct: 0, hint: "٣ أصغر من ٧ → استلف من العشرات" },
+      { type: "practice", question: "كم يساوي ٥٦١ - ٢٣٤؟", options: ["٣٢٧","٣١٧","٣٣٧","٢٢٧"], correct: 0, hint: "١ أصغر من ٤ → استلف من العشرات" },
+      { type: "done" },
+    ],
+  },
+  "u3-l14": {
+    title: "العلاقة بين الجمع والطرح", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔄", xp: 25,
+    steps: [
+      { type: "intro", body: "الجمع والطرح أخوان! كل عملية جمع لها عملية طرح مقابلة." },
+      { type: "explain", title: "عائلة العمليات", body: "إذا علمنا: ٢٠٠ + ٣٠٠ = ٥٠٠\nإذن نعلم:\n• ٥٠٠ - ٣٠٠ = ٢٠٠\n• ٥٠٠ - ٢٠٠ = ٣٠٠\n\nهذه تسمى عائلة عمليات حسابية!" },
+      { type: "practice", question: "إذا كان ١٤٢ + ٢٣٥ = ٣٧٧، فكم يساوي ٣٧٧ - ٢٣٥؟", options: ["١٤٢","٢٣٥","٣٧٧","١٣٢"], correct: 0, hint: "الطرح عكس الجمع" },
+      { type: "practice", question: "أكمل: ٢٦٠ + ___ = ٤٨٠", options: ["٢٢٠","٢٣٠","٢١٠","٢٤٠"], correct: 0, hint: "٤٨٠ - ٢٦٠ = ؟" },
+      { type: "done" },
+    ],
+  },
+
+  /* ══════ الوحدة الرابعة: الضرب ══════ */
+  "u4-l17": {
+    title: "مفهوم الضرب (جمع متكرر)", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "✖️", xp: 20,
+    steps: [
+      { type: "intro", body: "الضرب طريقة سريعة للجمع المتكرر! هيا نتعلمها." },
+      { type: "explain", title: "الضرب = جمع متكرر", body: "٣ × ٤ تعني: ٤ + ٤ + ٤ = ١٢\nأو: ٣ + ٣ + ٣ + ٣ = ١٢\n\n• العدد الأول = عدد المجموعات\n• العدد الثاني = عدد العناصر في كل مجموعة\n\nمثال: ٥ × ٣ = ١٥ (خمس مجموعات كل واحدة ٣ عناصر)",
+        visual: (<div className="flex gap-2 flex-wrap justify-center">{[1,2,3,4,5].map(g=>(<div key={g} className="flex gap-1">{[1,2,3].map(i=>(<div key={i} className="w-6 h-6 rounded-full" style={{background:"#FF8A3D"}}/>))}</div>))}</div>),
       },
-      {
-        type: "practice",
-        question: "كم يساوي ٦٨٧ - ٣٤٢؟",
-        options: ["٣٤٥", "٣٣٥", "٣٥٥", "٤٤٥"],
-        correct: 0,
-        hint: "٧-٢=٥، ٨-٤=٤، ٦-٣=٣",
+      { type: "practice", question: "٤ × ٢ = ؟ (يعني ٢+٢+٢+٢)", options: ["٨","٦","١٠","٤"], correct: 0, hint: "٢+٢+٢+٢ = ٨" },
+      { type: "practice", question: "٣ × ٦ = ؟", options: ["١٨","١٥","٢١","٩"], correct: 0, hint: "٦+٦+٦ = ١٨" },
+      { type: "practice", question: "كم كرة في ٤ أكياس كل كيس يحتوي ٥ كرات؟", options: ["٢٠","١٥","٢٥","١٠"], correct: 0, hint: "٤ × ٥ = ٢٠" },
+      { type: "done" },
+    ],
+  },
+  "u4-l18": {
+    title: "جدول ضرب ٢", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "✖️", xp: 25,
+    steps: [
+      { type: "intro", body: "جدول ضرب ٢ هو أسهل جدول! هيا نحفظه." },
+      { type: "explain", title: "جدول الضرب في ٢", body: "٢×١=٢    ٢×٦=١٢\n٢×٢=٤    ٢×٧=١٤\n٢×٣=٦    ٢×٨=١٦\n٢×٤=٨    ٢×٩=١٨\n٢×٥=١٠   ٢×١٠=٢٠\n\n💡 الضرب في ٢ = مضاعفة العدد" },
+      { type: "practice", question: "٢ × ٧ = ؟", options: ["١٤","١٢","١٦","١٠"], correct: 0, hint: "٢×٧ = ٧+٧ = ١٤" },
+      { type: "practice", question: "٢ × ٩ = ؟", options: ["١٨","١٦","٢٠","١٤"], correct: 0, hint: "٢×٩ = ٩+٩ = ١٨" },
+      { type: "practice", question: "__ × ٢ = ١٦", options: ["٨","٦","٧","٩"], correct: 0, hint: "١٦ ÷ ٢ = ٨" },
+      { type: "done" },
+    ],
+  },
+  "u4-l19": {
+    title: "جدول ضرب ٥", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "✖️", xp: 25,
+    steps: [
+      { type: "intro", body: "جدول ضرب ٥ سهل التذكر — دائماً ينتهي بـ ٠ أو ٥!" },
+      { type: "explain", title: "جدول الضرب في ٥", body: "٥×١=٥    ٥×٦=٣٠\n٥×٢=١٠   ٥×٧=٣٥\n٥×٣=١٥   ٥×٨=٤٠\n٥×٤=٢٠   ٥×٩=٤٥\n٥×٥=٢٥   ٥×١٠=٥٠\n\n💡 النتيجة دائماً تنتهي بـ ٠ أو ٥" },
+      { type: "practice", question: "٥ × ٦ = ؟", options: ["٣٠","٢٥","٣٥","٢٠"], correct: 0, hint: "٥×٦ = ٥×٥+٥ = ٣٠" },
+      { type: "practice", question: "٥ × ٨ = ؟", options: ["٤٠","٣٥","٤٥","٣٠"], correct: 0, hint: "٥×٨ = ٨×٥ = ٤٠" },
+      { type: "practice", question: "كم دقيقة في ٦ ساعات؟ (كل ساعة ٦٠ دقيقة = ٥×٦×٢)", options: ["٣٦٠","٣٠٠","٤٢٠","٣٠"], correct: 0, hint: "٦ × ٦٠ = ٣٦٠ دقيقة" },
+      { type: "done" },
+    ],
+  },
+  "u4-l20": {
+    title: "جدول ضرب ١٠", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "✖️", xp: 25,
+    steps: [
+      { type: "intro", body: "جدول ضرب ١٠ الأسهل على الإطلاق! أضف صفراً في النهاية." },
+      { type: "explain", title: "جدول الضرب في ١٠", body: "١٠×١=١٠   ١٠×٦=٦٠\n١٠×٢=٢٠   ١٠×٧=٧٠\n١٠×٣=٣٠   ١٠×٨=٨٠\n١٠×٤=٤٠   ١٠×٩=٩٠\n١٠×٥=٥٠   ١٠×١٠=١٠٠\n\n💡 القاعدة: أضف صفراً في نهاية العدد!" },
+      { type: "practice", question: "١٠ × ٧ = ؟", options: ["٧٠","٦٠","٨٠","١٧"], correct: 0, hint: "أضف صفراً: ٧ → ٧٠" },
+      { type: "practice", question: "١٠ × ٩ = ؟", options: ["٩٠","٨٠","١٠٠","٩١"], correct: 0, hint: "أضف صفراً: ٩ → ٩٠" },
+      { type: "practice", question: "__ × ١٠ = ٥٠", options: ["٥","١٠","٤","٦"], correct: 0, hint: "٥٠ ÷ ١٠ = ٥" },
+      { type: "done" },
+    ],
+  },
+
+  /* ══════ الوحدة الخامسة: القياس ══════ */
+  "u5-l22": {
+    title: "قياس الطول", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "📏", xp: 20,
+    steps: [
+      { type: "intro", body: "سنتعلم كيف نقيس الأشياء باستخدام المتر والسنتيمتر!" },
+      { type: "explain", title: "وحدات قياس الطول", body: "السنتيمتر (سم): لقياس الأشياء الصغيرة\nالمتر (م): لقياس الأشياء الكبيرة\n\n١ متر = ١٠٠ سنتيمتر\n\nأمثلة:\n📏 طول القلم ≈ ١٥ سم\n📏 طول الباب ≈ ٢ متر\n📏 طول الطاولة ≈ ٨٠ سم\n📏 طول الإنسان ≈ ١٦٠ سم" },
+      { type: "practice", question: "كم سنتيمتراً في متر واحد؟", options: ["١٠٠","١٠","١٠٠٠","٥٠"], correct: 0, hint: "١ م = ١٠٠ سم" },
+      { type: "practice", question: "أيٌّ من الأشياء يُقاس بالمتر؟", options: ["طول الغرفة","طول القلم","طول الإصبع","طول الكتاب"], correct: 0, hint: "الأشياء الكبيرة تُقاس بالمتر" },
+      { type: "practice", question: "طول سارة ١٢٥ سم وطول أختها ١١٨ سم. من الأطول؟", options: ["سارة","أختها","متساويتان","لا يمكن معرفة ذلك"], correct: 0, hint: "١٢٥ > ١١٨" },
+      { type: "done" },
+    ],
+  },
+  "u5-l25": {
+    title: "الزمن (الساعة والدقيقة)", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🕐", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم قراءة الوقت من الساعة!" },
+      { type: "explain", title: "قراءة الساعة", body: "الساعة لها عقربان:\n⏱️ عقرب الساعات: قصير — يشير إلى الساعة\n⏱️ عقرب الدقائق: طويل — يشير إلى الدقائق\n\nأمثلة:\n• العقرب الطويل على ١٢ والقصير على ٣ = الساعة الثالثة تماماً\n• العقرب الطويل على ٦ والقصير بين ٤ و٥ = الساعة الرابعة والنصف\n\n١ ساعة = ٦٠ دقيقة\n١ يوم = ٢٤ ساعة" },
+      { type: "practice", question: "كم دقيقة في ساعة واحدة؟", options: ["٦٠","٣٠","١٢","٢٤"], correct: 0, hint: "١ ساعة = ٦٠ دقيقة" },
+      { type: "practice", question: "إذا كان الوقت الساعة ٣:٣٠، فكم دقيقة مضت من الساعة الثالثة؟", options: ["٣٠","١٥","٤٥","٦٠"], correct: 0, hint: "٣:٣٠ = ثلاثة وثلاثون دقيقة = ٣٠ دقيقة بعد الثالثة" },
+      { type: "done" },
+    ],
+  },
+
+  /* ══════ الوحدة السادسة: الهندسة ══════ */
+  "u6-l27": {
+    title: "الأشكال الهندسية المستوية", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🔷", xp: 20,
+    steps: [
+      { type: "intro", body: "سنتعلم الأشكال الهندسية المستوية وخصائصها!" },
+      { type: "explain", title: "الأشكال المستوية", body: "المربع ⬛: ٤ أضلاع متساوية، ٤ زوايا قائمة\nالمستطيل 🟩: ضلعان طويلان وضلعان قصيران\nالمثلث 🔺: ٣ أضلاع و٣ زوايا\nالدائرة ⭕: لا أضلاع، محيطها منحنٍ\nالمعين 🔷: ٤ أضلاع متساوية بزوايا مختلفة",
+        visual: (<div className="grid grid-cols-3 gap-3 text-center">{[["⬛","المربع","٤ أضلاع متساوية"],["🟩","المستطيل","ضلعان طويلان"],["🔺","المثلث","٣ أضلاع"],["⭕","الدائرة","لا أضلاع"],["🔷","المعين","٤ أضلاع متساوية"]].map(([s,n,d])=>(<div key={n} className="rounded-xl p-2" style={{background:"var(--cream-md)"}}><div className="text-2xl">{s}</div><div className="font-bold text-xs">{n}</div><div className="text-[10px]" style={{color:"var(--text-muted)"}}>{d}</div></div>))}</div>),
       },
-      {
-        type: "practice",
-        question: "كان معي ٨٩٥ ريال وأنفقت ٢٣١ ريال. كم تبقى معي؟",
-        options: ["٦٥٤", "٦٦٤", "٦٤٤", "٧٦٤"],
-        correct: 1,
-        hint: "٨٩٥ - ٢٣١ = ؟",
+      { type: "practice", question: "أي شكل له ٤ أضلاع متساوية وأربع زوايا قائمة؟", options: ["المربع","المثلث","الدائرة","المعين"], correct: 0, hint: "المربع له ٤ أضلاع متساوية وزوايا قائمة" },
+      { type: "practice", question: "كم عدد أضلاع المثلث؟", options: ["٣","٤","٦","٢"], correct: 0, hint: "المثلث = ثلاثة أضلاع" },
+      { type: "practice", question: "أيٌّ من الأشكال ليس له أضلاع؟", options: ["الدائرة","المربع","المثلث","المستطيل"], correct: 0, hint: "الدائرة منحنية وليس لها أضلاع مستقيمة" },
+      { type: "done" },
+    ],
+  },
+
+  /* ══════ الوحدة السابعة: الكسور ══════ */
+  "u7-l31": {
+    title: "مفهوم الكسر", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🍕", xp: 20,
+    steps: [
+      { type: "intro", body: "سنتعلم الكسور — وهي طريقة لتمثيل أجزاء من الكل!" },
+      { type: "explain", title: "ما هو الكسر؟", body: "الكسر يمثل جزءاً من الكل:\n\n١/٢ = النصف (قسّمنا الشيء لجزأين وأخذنا جزءاً واحداً)\n١/٤ = الربع (قسّمنا لأربعة أجزاء وأخذنا جزءاً واحداً)\n١/٣ = الثلث (قسّمنا لثلاثة أجزاء وأخذنا جزءاً واحداً)\n\nالكسر: البسط ← عدد الأجزاء المأخوذة\n         المقام ← عدد الأجزاء الكلية",
+        visual: (<div className="flex gap-4 justify-center">{[["١/٢","🍕🍕","نصف"],["١/٤","🍕","ربع"],["١/٣","🍕","ثلث"]].map(([k,e,l])=>(<div key={k} className="text-center"><div className="text-3xl font-black" style={{color:"#FF8A3D"}}>{k}</div><div className="text-xl mt-1">{e}</div><div className="text-xs font-bold">{l}</div></div>))}</div>),
       },
-      {
-        type: "done",
-      },
+      { type: "practice", question: "إذا قسّمنا التفاحة لأربعة أجزاء وأكلنا جزءاً واحداً. ما الكسر الذي أكلناه؟", options: ["١/٤","١/٢","٣/٤","١/٣"], correct: 0, hint: "جزء واحد من أربعة = ١/٤" },
+      { type: "practice", question: "ما الكسر الأكبر؟", options: ["١/٢","١/٤","١/٨","١/١٠"], correct: 0, hint: "كلما كان المقام أصغر، كان الكسر أكبر" },
+      { type: "done" },
+    ],
+  },
+  "u7-l32": {
+    title: "النصف والربع والثلث", subject: "الرياضيات", subjectColor: "#FF8A3D", icon: "🍕", xp: 25,
+    steps: [
+      { type: "intro", body: "سنتعلم النصف والربع والثلث بطريقة ممتعة!" },
+      { type: "explain", title: "أنواع الكسور الشائعة", body: "النصف (١/٢): نقسم الشيء لقسمين متساويين\nالثلث (١/٣): نقسم الشيء لثلاثة أقسام متساوية\nالربع (١/٤): نقسم الشيء لأربعة أقسام متساوية\n\nأمثلة من الحياة:\n🍕 نصف البيتزا = نصفان متساويان\n⏰ ربع الساعة = ١٥ دقيقة\n🍫 ثلث الشوكولاتة = ثلاثة أجزاء متساوية" },
+      { type: "practice", question: "كم دقيقة في ربع الساعة؟", options: ["١٥","٣٠","٢٠","٤٥"], correct: 0, hint: "٦٠ ÷ ٤ = ١٥ دقيقة" },
+      { type: "practice", question: "إذا كان عندك ١٢ تفاحة، كم تفاحة تمثل ثلث العدد؟", options: ["٤","٦","٣","٨"], correct: 0, hint: "١٢ ÷ ٣ = ٤" },
+      { type: "practice", question: "نصف ٢٠ = ؟", options: ["١٠","٥","١٥","٤"], correct: 0, hint: "٢٠ ÷ ٢ = ١٠" },
+      { type: "done" },
     ],
   },
 };
