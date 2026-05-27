@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>مدار — تجربة تفاعلية</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --primary: #FF8A3D;
+  --primary-dk: #C04010;
+  --cream: #FFF6E9;
+  --cream-md: #FFE8CC;
+  --cream-dk: #FFD89E;
+  --text-main: #3A2210;
+  --text-muted: #7A5A38;
+  --track: #FFE3D6;
+  --font-display: 'Baloo 2', 'Tajawal', system-ui, sans-serif;
+  --font-body: 'Tajawal', 'Nunito', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--text-main);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font-family: inherit; }
+
+/* ─── iPad device frame + scale-to-fit stage ─── */
+.stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #0E0A07;
+}
+.ipad {
+  position: relative;
+  width: 1366px; height: 1024px;
+  flex-shrink: 0;
+  border-radius: 44px;
+  background: #2A2118;
+  padding: 18px;
+  box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.05);
+  transform-origin: center;
+}
+.ipad::before {
+  content: '';
+  position: absolute; top: 50%; right: -3px;
+  width: 4px; height: 60px; border-radius: 2px;
+  background: #1a1410; transform: translateY(-180%);
+}
+.ipad::after {
+  content: '';
+  position: absolute; top: 50%; right: -3px;
+  width: 4px; height: 90px; border-radius: 2px;
+  background: #1a1410; transform: translateY(-20%);
+}
+.ipad-screen {
+  width: 100%; height: 100%;
+  border-radius: 28px;
+  background: var(--cream);
+  overflow: hidden;
+  position: relative;
+}
+
+/* iPad camera notch */
+.ipad-cam {
+  position: absolute; top: 28px; right: 22px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #4A3A2A;
+  z-index: 100;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+}
+
+#app { width: 100%; height: 100%; position: relative; }
+
+/* Decorative blob (positioned per-screen) */
+.blob {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; filter: blur(.5px);
+  z-index: 0;
+}
+
+/* ─── Animations ─── */
+@keyframes pop {
+  0%   { transform: scale(.6); opacity: 0; }
+  60%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes pulse {
+  0%   { transform: translateX(-50%) scale(.95); opacity: .6; }
+  100% { transform: translateX(-50%) scale(1.25); opacity: 0; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-10px); }
+  40%      { transform: translateX(10px); }
+  60%      { transform: translateX(-7px); }
+  80%      { transform: translateX(7px); }
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes tileIn {
+  from { transform: translateY(20px) scale(.92); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes confettiFly {
+  0%   { transform: translate(-50%, -50%) rotate(0); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) rotate(var(--rot, 0)); opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Tappable base */
+.tappable {
+  font-family: inherit; cursor: pointer; user-select: none;
+  background: none; outline: none; border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.tappable:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+/* Scrollbars (subtle) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(168,137,95,.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(168,137,95,.5); }
+</style>
+
+<script type="application/json" id="ext-resource-dependency">
+{"deps":[
+  "https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800;900&display=swap",
+  "https://unpkg.com/react@18.3.1/umd/react.development.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js",
+  "https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+]}
+</script>
+</head>
+
+<body style="background-color: rgb(232, 221, 205); font-family: Tahoma">
+<div class="stage" id="stage">
+  <div class="ipad" id="ipad">
+    <div class="ipad-cam"></div>
+    <div class="ipad-screen">
+      <div id="app"></div>
+    </div>
+  </div>
+</div>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Scale-to-fit script (iPad scales to viewport) -->
+<script>
+(function scaleStage(){
+  const W = 1366, H = 1024;
+  const ipad = document.getElementById('ipad');
+  function fit() {
+    const pad = 40;
+    const sx = (window.innerWidth  - pad) / (W + 36);
+    const sy = (window.innerHeight - pad) / (H + 36);
+    const s = Math.min(sx, sy, 1);
+    ipad.style.transform = `scale(${s})`;
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+
+<!-- App scripts -->
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="brand.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="screens-shell.jsx"></script>
+<script type="text/babel" src="screens-home.jsx"></script>
+<script type="text/babel" src="screens-lesson.jsx"></script>
+<script type="text/babel" src="screens-quiz.jsx"></script>
+<script type="text/babel" src="screens-meta.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
