@@ -51,6 +51,17 @@ export const ENGLISH_G2_LESSONS: Record<string, {
       { type: "done" },
     ],
   },
+  "u1-l4": {
+    title: "Phonics: Short Vowels", subject: "English", subjectColor: "#5BA3D9", icon: "🔤", xp: 25,
+    steps: [
+      { type: "intro", body: "Let's learn the short vowel sounds in English! 🎵" },
+      { type: "explain", title: "Short Vowel Sounds", body: "The 5 short vowels:\n\n🅐 a — as in: cat, hat, map\n🅔 e — as in: bed, red, ten\n🅘 i — as in: big, hit, sit\n🅞 o — as in: dog, hot, top\n🅤 u — as in: cup, bug, run\n\n💡 Short vowels are short sounds in the middle of words!" },
+      { type: "practice", question: "What is the short vowel in 'cat'?", options: ["a","e","i","o"], correct: 0, hint: "c-A-t — the vowel in the middle is 'a'" },
+      { type: "practice", question: "Which word has a short 'i' sound?", options: ["big","cake","bean","boat"], correct: 0, hint: "b-I-g — the 'i' in big is short" },
+      { type: "practice", question: "What is the short vowel in 'cup'?", options: ["u","a","e","o"], correct: 0, hint: "c-U-p — the vowel is 'u'" },
+      { type: "done" },
+    ],
+  },
   "u2-l6": {
     title: "Family Members",
     subject: "English", subjectColor: "#5BA3D9", icon: "👨‍👩‍👧", xp: 20,
@@ -86,6 +97,26 @@ export const ENGLISH_G2_LESSONS: Record<string, {
       { type: "done" },
     ],
   },
+  "u2-l7": {
+    title: "This is / These are", subject: "English", subjectColor: "#5BA3D9", icon: "👆", xp: 20,
+    steps: [
+      { type: "intro", body: "Let's learn how to point to things and people in English!" },
+      { type: "explain", title: "This is / These are", body: "'This is' — نستخدمها للإشارة لشيء واحد قريب:\n• This is my book. هذا كتابي.\n• This is my father. هذا أبي.\n\n'These are' — نستخدمها للإشارة لأشياء متعددة:\n• These are my books. هذه كتبي.\n• These are my friends. هؤلاء أصدقائي.\n\n💡 This = هذا/هذه (مفرد)\n    These = هؤلاء/هذه (جمع)" },
+      { type: "practice", question: "Complete: ___ is my pencil. (pointing to one pencil)", options: ["This","These","That","Those"], correct: 0, hint: "'This' is used for one nearby thing" },
+      { type: "practice", question: "Complete: ___ are my books. (pointing to many books)", options: ["These","This","That","It"], correct: 0, hint: "'These' is used for many nearby things" },
+      { type: "done" },
+    ],
+  },
+  "u2-l9": {
+    title: "Phonics: Long Vowels", subject: "English", subjectColor: "#5BA3D9", icon: "🔤", xp: 25,
+    steps: [
+      { type: "intro", body: "Now let's learn long vowel sounds — they say their own name! 📢" },
+      { type: "explain", title: "Long Vowel Sounds", body: "Long vowels say their own letter name:\n\n🅐 a — as in: cake, name, lake\n🅔 e — as in: tree, feet, sea\n🅘 i — as in: bike, kite, time\n🅞 o — as in: bone, home, rope\n🅤 u — as in: cube, cute, tune\n\n💡 Long vowels sound longer than short vowels!\nShort: cat  vs  Long: cake" },
+      { type: "practice", question: "Which word has a long 'a' sound?", options: ["cake","cat","bat","hat"], correct: 0, hint: "c-AKE — the 'a' says its name: 'ay'" },
+      { type: "practice", question: "Which word has a long 'i' sound?", options: ["kite","sit","bit","hit"], correct: 0, hint: "k-ITE — the 'i' says its name: 'eye'" },
+      { type: "done" },
+    ],
+  },
   "u2-l8": {
     title: "Possessive Pronouns", subject: "English", subjectColor: "#5BA3D9", icon: "📝", xp: 25,
     steps: [
@@ -108,6 +139,16 @@ export const ENGLISH_G2_LESSONS: Record<string, {
       { type: "done" },
     ],
   },
+  "u3-l12": {
+    title: "There is / There are", subject: "English", subjectColor: "#5BA3D9", icon: "📍", xp: 20,
+    steps: [
+      { type: "intro", body: "Let's learn how to describe what's in a place!" },
+      { type: "explain", title: "There is / There are", body: "'There is' — يوجد (مفرد):\n• There is a book on the table. يوجد كتاب على الطاولة.\n• There is a cat in the room. يوجد قطة في الغرفة.\n\n'There are' — يوجد (جمع):\n• There are 3 books on the table. يوجد ٣ كتب على الطاولة.\n• There are students in class. يوجد طلاب في الفصل.\n\n💡 There is + one thing (مفرد)\n    There are + many things (جمع)" },
+      { type: "practice", question: "Complete: ___ a pen in my bag. (قلم واحد)", options: ["There is","There are","This is","These are"], correct: 0, hint: "'There is' = يوجد — for one thing (مفرد)" },
+      { type: "practice", question: "Complete: ___ five students in the library.", options: ["There are","There is","This is","It is"], correct: 0, hint: "Five students = many → 'There are'" },
+      { type: "done" },
+    ],
+  },
   "u3-l13": {
     title: "Prepositions of Place", subject: "English", subjectColor: "#5BA3D9", icon: "📍", xp: 25,
     steps: [
@@ -115,6 +156,27 @@ export const ENGLISH_G2_LESSONS: Record<string, {
       { type: "explain", title: "Prepositions of Place", body: "in = داخل (in the box)\non = على (on the table)\nunder = تحت (under the chair)\nnext to = بجانب (next to the door)\nbehind = خلف (behind the tree)\nin front of = أمام (in front of the school)\n\nExamples:\n• The book is on the table.\n• The cat is under the chair.\n• The bag is next to the desk." },
       { type: "practice", question: "The book is ___ the table. (على الطاولة)", options: ["on","in","under","behind"], correct: 0, hint: "on = على السطح" },
       { type: "practice", question: "The cat is ___ the chair. (تحت الكرسي)", options: ["under","on","in","next to"], correct: 0, hint: "under = تحت" },
+      { type: "done" },
+    ],
+  },
+  "u4-l16": {
+    title: "Can / Can't (abilities)", subject: "English", subjectColor: "#5BA3D9", icon: "💪", xp: 25,
+    steps: [
+      { type: "intro", body: "Let's learn how to talk about what animals and people can do!" },
+      { type: "explain", title: "Can and Can't", body: "Can = يستطيع (قدرة)\nCan't = لا يستطيع (عدم قدرة)\n\nExamples:\n🐦 Birds can fly. الطيور تستطيع الطيران.\n🐟 Fish can swim. الأسماك تستطيع السباحة.\n🐧 Penguins can't fly! البطاريق لا تستطيع الطيران.\n\nQuestions:\n❓ Can birds fly? → Yes, they can.\n❓ Can fish walk? → No, they can't.\n\n💡 I can = أستطيع\n    I can't = لا أستطيع" },
+      { type: "practice", question: "Can fish swim?", options: ["Yes, they can.","No, they can't.","Yes, it can.","No, I can't."], correct: 0, hint: "Fish are excellent swimmers!" },
+      { type: "practice", question: "Complete: Birds ___ fly.", options: ["can","can't","is","are"], correct: 0, hint: "Birds have wings — they can fly!" },
+      { type: "practice", question: "Complete: Fish ___ walk on land.", options: ["can't","can","is","are"], correct: 0, hint: "Fish live in water — they cannot walk on land." },
+      { type: "done" },
+    ],
+  },
+  "u4-l17": {
+    title: "Simple Sentences", subject: "English", subjectColor: "#5BA3D9", icon: "✏️", xp: 20,
+    steps: [
+      { type: "intro", body: "Let's learn how to write simple sentences in English! ✍️" },
+      { type: "explain", title: "Simple Sentences", body: "A simple sentence has:\n📌 Subject (الفاعل) — who or what\n📌 Verb (الفعل) — what they do\n📌 Object (المفعول به) — what they do it to\n\nExamples:\nThe dog (subject) runs (verb).\nAli (subject) eats (verb) an apple (object).\nThe cat (subject) drinks (verb) milk (object).\n\n💡 Always start with a capital letter!\n💡 Always end with a period (.)" },
+      { type: "practice", question: "Which is a complete simple sentence?", options: ["The bird sings.","bird sings","The bird","sings loud"], correct: 0, hint: "A sentence needs a subject and a verb — 'The bird sings' has both!" },
+      { type: "practice", question: "What comes at the END of a sentence?", options: ["A period (.)","A capital letter","A question mark always","Nothing"], correct: 0, hint: "Sentences end with a period, question mark, or exclamation mark" },
       { type: "done" },
     ],
   },
@@ -130,13 +192,27 @@ export const ENGLISH_G2_LESSONS: Record<string, {
       { type: "done" },
     ],
   },
-  "u5-l21": {
+  "u5-l20": {
     title: "I like / I don't like", subject: "English", subjectColor: "#5BA3D9", icon: "👍", xp: 20,
     steps: [
       { type: "intro", body: "Let's learn how to express what we like and don't like!" },
-      { type: "explain", title: "Likes and Dislikes", body: "I like = أحب\nI don't like = لا أحب\nDo you like...? = هل تحب...؟\nYes, I do. = نعم\nNo, I don't. = لا\n\nExamples:\n• I like apples. أحب التفاح.\n• I don't like vegetables. لا أحب الخضروات.\n• Do you like milk? هل تحب الحليب?" },
+      { type: "explain", title: "Likes and Dislikes", body: "I like = أحب\nI don't like = لا أحب\nDo you like...? = هل تحب...؟\nYes, I do. = نعم، أحب.\nNo, I don't. = لا، لا أحب.\n\nExamples:\n• I like apples. أحب التفاح.\n• I don't like vegetables. لا أحب الخضروات.\n• Do you like milk? هل تحب الحليب?" },
       { type: "practice", question: "How do you say 'أحب البيتزا' in English?", options: ["I like pizza.","I don't like pizza.","Do you like pizza?","She likes pizza."], correct: 0, hint: "أحب = I like" },
-      { type: "practice", question: "How do you say 'لا أحب الخضروات' in English?", options: ["I don't like vegetables.","I like vegetables.","She doesn't like vegetables.","Do you like vegetables?"], correct: 0, hint: "لا أحب = I don't like" },
+      { type: "practice", question: "How do you say 'لا أحب الخضروات'?", options: ["I don't like vegetables.","I like vegetables.","She doesn't like vegetables.","Do you like vegetables?"], correct: 0, hint: "لا أحب = I don't like" },
+      { type: "done" },
+    ],
+  },
+  "u5-l21": {
+    title: "Healthy vs Unhealthy Food", subject: "English", subjectColor: "#5BA3D9", icon: "🥗", xp: 20,
+    steps: [
+      { type: "intro", body: "Let's learn which foods are healthy and which are not! 🥦🍕" },
+      {
+        type: "explain", title: "Healthy vs Unhealthy Food",
+        body: "Healthy food (طعام صحي) 💚:\n🥦 vegetables — خضروات\n🍎 fruits — فاكهة\n🥛 milk — حليب\n🥚 eggs — بيض\n🐟 fish — سمك\n\nUnhealthy food (طعام غير صحي) ❌:\n🍭 candy — حلوى\n🍟 chips — رقائق البطاطا\n🥤 soda — مشروبات غازية\n🍔 fast food — وجبات سريعة\n\n💡 Eat more healthy food to stay strong and fit!",
+        visual: (<div className="grid grid-cols-2 gap-2 text-center text-sm">{[["💚 Healthy","🍎🥦🥛🥚","أكل صحي"],["❌ Unhealthy","🍭🍟🥤🍔","أكل غير صحي"]].map(([label,icons,ar])=>(<div key={String(label)} className="rounded-xl p-2" style={{background:"#D6EAF8"}}><div className="font-black">{label}</div><div className="text-xl">{icons}</div><div className="text-xs">{ar}</div></div>))}</div>),
+      },
+      { type: "practice", question: "Which is a healthy food?", options: ["apple 🍎","candy 🍭","chips 🍟","soda 🥤"], correct: 0, hint: "Fruits are healthy foods!" },
+      { type: "practice", question: "Which food should you eat LESS of?", options: ["fast food 🍔","vegetables 🥦","fruits 🍎","milk 🥛"], correct: 0, hint: "Fast food is unhealthy and should be eaten rarely" },
       { type: "done" },
     ],
   },

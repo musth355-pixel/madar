@@ -6,6 +6,7 @@ import { ENGLISH_G2_LESSONS } from "./english-g2";
 import { SOCIAL_G2_LESSONS } from "./social-g2";
 import { QURAN_G2_LESSONS } from "./quran-g2";
 import { TECH_G2_LESSONS } from "./tech-g2";
+import { ARTS_G2_LESSONS } from "./arts-g2";
 
 const ALL_LESSONS: Record<string, Record<string, unknown>> = {
   math: MATH_G2_LESSONS,
@@ -16,6 +17,7 @@ const ALL_LESSONS: Record<string, Record<string, unknown>> = {
   social: SOCIAL_G2_LESSONS,
   quran: QURAN_G2_LESSONS,
   tech: TECH_G2_LESSONS,
+  arts: ARTS_G2_LESSONS,
 };
 
 export function getLesson(subjectId: string, unitId: string, lessonId: string) {
