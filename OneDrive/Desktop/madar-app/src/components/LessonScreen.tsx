@@ -2,6 +2,56 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 
+function playSound(type: "correct" | "wrong" | "complete" | "next") {
+  const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const g = ctx.createGain();
+  g.connect(ctx.destination);
+
+  if (type === "correct") {
+    [523, 659, 784].forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      o.type = "sine";
+      o.frequency.value = freq;
+      o.connect(g);
+      g.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.12);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.25);
+      o.start(ctx.currentTime + i * 0.12);
+      o.stop(ctx.currentTime + i * 0.12 + 0.25);
+    });
+  } else if (type === "wrong") {
+    const o = ctx.createOscillator();
+    o.type = "sawtooth";
+    o.frequency.setValueAtTime(300, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.3);
+    o.connect(g);
+    g.gain.setValueAtTime(0.25, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.3);
+  } else if (type === "complete") {
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      o.type = "sine";
+      o.frequency.value = freq;
+      o.connect(g);
+      g.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.15);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.4);
+      o.start(ctx.currentTime + i * 0.15);
+      o.stop(ctx.currentTime + i * 0.15 + 0.4);
+    });
+  } else if (type === "next") {
+    const o = ctx.createOscillator();
+    o.type = "sine";
+    o.frequency.setValueAtTime(440, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + 0.1);
+    o.connect(g);
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.15);
+  }
+}
+
 type Step = {
   type: "intro" | "explain" | "example" | "practice" | "done";
   title?: string;
@@ -125,6 +175,7 @@ export default function LessonScreen({ lesson, onClose, onComplete }: Props) {
       setMascot("done");
       setBubble("أحسنت! أنت بطل! 🏆");
       setShowConfetti(true);
+      playSound("complete");
       setTimeout(() => setShowConfetti(false), 3000);
     }
     setSelected(null);
@@ -140,16 +191,19 @@ export default function LessonScreen({ lesson, onClose, onComplete }: Props) {
       setMascot("cheer");
       setBubble("ممتاز! إجابة صحيحة تماماً! 🎉");
       setShowConfetti(true);
+      playSound("correct");
       setTimeout(() => setShowConfetti(false), 1800);
     } else {
       setHearts(h => Math.max(0, h - 1));
       setMascot("wrong");
       setBubble(step.hint ? `تلميح: ${step.hint} 💡` : "حاول مرة أخرى في الدرس القادم! 💪");
+      playSound("wrong");
     }
   };
 
   const handleNext = () => {
-    if (isLast) { onComplete(xpEarned + 10); return; }
+    if (isLast) { playSound("complete"); onComplete(xpEarned + 10); return; }
+    playSound("next");
     setStepIndex(i => i + 1);
   };
 
@@ -217,24 +271,89 @@ export default function LessonScreen({ lesson, onClose, onComplete }: Props) {
 
         {/* ── EXPLAIN ── */}
         {(step.type === "explain" || step.type === "example") && (
-          <div className="space-y-3">
+          <div className="space-y-3" style={{ animation: "pop 0.35s ease" }}>
+            {/* عنوان الدرس */}
             {step.title && (
-              <div className="rounded-2xl px-4 py-2 font-black text-lg text-white text-center" style={{ background: lesson.subjectColor }}>
-                {step.title}
+              <div
+                className="rounded-2xl px-5 py-3 font-black text-lg text-white text-center flex items-center justify-center gap-2"
+                style={{ background: `linear-gradient(135deg, ${lesson.subjectColor}, ${lesson.subjectColor}bb)`, boxShadow: `0 4px 16px ${lesson.subjectColor}44` }}
+              >
+                <span>{lesson.icon}</span>
+                <span>{step.title}</span>
               </div>
             )}
-            <div className="rounded-3xl p-5 space-y-3" style={{ background: "white", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
-              {step.body && (
-                <pre className="whitespace-pre-wrap font-sans text-base leading-loose" style={{ color: "var(--text-main)" }}>
-                  {step.body}
-                </pre>
-              )}
-              {step.visual && (
-                <div className="rounded-2xl p-4" style={{ background: lesson.subjectColor + "10" }}>
-                  {step.visual}
-                </div>
-              )}
-            </div>
+
+            {/* المحتوى */}
+            {step.body && (
+              <div className="space-y-2">
+                {step.body.split("\n").map((line, i) => {
+                  const trimmed = line.trim();
+                  if (!trimmed) return <div key={i} className="h-1" />;
+
+                  // سطر تلميح 💡
+                  if (trimmed.startsWith("💡")) return (
+                    <div key={i} className="rounded-2xl px-4 py-3 flex gap-2 items-start font-bold text-sm"
+                      style={{ background: "#FFF9E6", border: "2px solid #FFD700", color: "#7A5E00" }}>
+                      <span className="text-xl flex-shrink-0">💡</span>
+                      <span className="leading-relaxed">{trimmed.slice(2).trim()}</span>
+                    </div>
+                  );
+
+                  // سطر قاعدة ✅
+                  if (trimmed.startsWith("✅")) return (
+                    <div key={i} className="rounded-xl px-4 py-2.5 flex gap-2 items-center font-bold text-sm"
+                      style={{ background: "#E8F8EF", color: "#1a7a45" }}>
+                      <span className="text-lg">✅</span>
+                      <span>{trimmed.slice(2).trim()}</span>
+                    </div>
+                  );
+
+                  // عنوان فرعي (يبدأ بـ ١. ٢. ٣. أو 1. 2.)
+                  if (/^[١٢٣٤٥٦٧٨٩1-9][\.\．]/.test(trimmed)) return (
+                    <div key={i} className="rounded-xl px-4 py-2.5 font-black text-sm flex gap-2 items-start"
+                      style={{ background: lesson.subjectColor + "18", color: "var(--text-main)", borderRight: `3px solid ${lesson.subjectColor}` }}>
+                      <span style={{ color: lesson.subjectColor }}>{trimmed[0]}.</span>
+                      <span>{trimmed.slice(2).trim()}</span>
+                    </div>
+                  );
+
+                  // نقطة رئيسية • أو -  أو 📌
+                  if (trimmed.startsWith("•") || trimmed.startsWith("-") || trimmed.startsWith("📌")) {
+                    const content = trimmed.replace(/^[•\-📌]\s*/, "");
+                    return (
+                      <div key={i} className="rounded-xl px-4 py-2.5 font-bold text-sm flex gap-2 items-center"
+                        style={{ background: "white", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", color: "var(--text-main)" }}>
+                        <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: lesson.subjectColor }} />
+                        <span>{content}</span>
+                      </div>
+                    );
+                  }
+
+                  // مثال (يحتوي مساواة أو ←)
+                  if (trimmed.includes("=") || trimmed.includes("←") || trimmed.includes("→")) return (
+                    <div key={i} className="rounded-xl px-4 py-2.5 font-black text-center text-base"
+                      style={{ background: lesson.subjectColor + "15", color: lesson.subjectColor, fontFamily: "monospace", letterSpacing: "0.03em" }}>
+                      {trimmed}
+                    </div>
+                  );
+
+                  // سطر عادي
+                  return (
+                    <div key={i} className="rounded-xl px-4 py-2 text-sm leading-relaxed font-medium"
+                      style={{ color: "var(--text-main)", background: "white", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+                      {trimmed}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* العنصر المرئي */}
+            {step.visual && (
+              <div className="rounded-2xl p-4" style={{ background: lesson.subjectColor + "10", border: `1.5px solid ${lesson.subjectColor}30` }}>
+                {step.visual}
+              </div>
+            )}
           </div>
         )}
 
