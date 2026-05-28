@@ -8,20 +8,106 @@ import { ACHIEVEMENTS } from "@/lib/data";
 import LessonScreen from "@/components/LessonScreen";
 import { getLesson } from "@/lib/lessons/index";
 import { getStudent, updateStudent } from "@/lib/storage";
+import { LEARNING_STYLE_LABELS } from "@/lib/types";
 import type { StudentDNA } from "@/lib/types";
 
 type Tab = "home" | "journey" | "awards" | "profile";
+
+// ── Lookup data ───────────────────────────────────────────────────────────────
+
+const ZONES = [
+  { subjectId: "math",    name: "محطة الرياضيات",  icon: "🔢", bg: "#FFE3D6", color: "#FF8A3D" },
+  { subjectId: "arabic",  name: "واحة لغتي",        icon: "📖", bg: "#FFF0D4", color: "#E5602A" },
+  { subjectId: "science", name: "مختبر العلوم",     icon: "🔬", bg: "#DFF3E9", color: "#4FB286" },
+  { subjectId: "english", name: "عالم الإنجليزية",  icon: "🌍", bg: "#D6EAF8", color: "#5BA3D9" },
+];
+
+const SKILL_LABELS: Record<string, string> = {
+  "math.addition":     "الجمع",
+  "math.subtraction":  "الطرح",
+  "math.geometry":     "الأشكال الهندسية",
+  "math.numbers":      "الأرقام والتسلسل",
+  "arabic.phonics":    "الحروف والأصوات",
+  "arabic.grammar":    "القواعد والصرف",
+  "arabic.vocabulary": "المفردات والمعاني",
+  "science.animals":   "عالم الحيوان",
+  "science.plants":    "عالم النبات",
+};
+
+const ZONE_SUBJECT: Record<string, string> = {
+  "math.addition": "math", "math.subtraction": "math",
+  "math.geometry": "math", "math.numbers": "math",
+  "arabic.phonics": "arabic", "arabic.grammar": "arabic", "arabic.vocabulary": "arabic",
+  "science.animals": "science", "science.plants": "science",
+};
+
+function getMadarMessage(student: StudentDNA): string {
+  const style = student.learningStyle;
+  if (style === "visual")      return "سأريك صوراً ورسوماً تجعل كل درس ممتعاً! 🎨";
+  if (style === "auditory")    return "استمع جيداً وستتذكر كل شيء بسهولة! 🎧";
+  if (style === "kinesthetic") return "جرّب بنفسك — التجربة أفضل معلم! ✋";
+  if (style === "reading")     return "كل كلمة تقرأها تزيدك ذكاءً! 📖";
+  return "أنا هنا لأساعدك في كل خطوة! 🌟";
+}
+
+function getDailyMission(student: StudentDNA): { skill: string; subject: string; icon: string } | null {
+  const weakSkills = student.diagnostic?.weakSkills ?? [];
+  if (!weakSkills.length) return null;
+  const skillId = weakSkills[0];
+  const subjectId = ZONE_SUBJECT[skillId] ?? "math";
+  const zone = ZONES.find(z => z.subjectId === subjectId);
+  return {
+    skill: SKILL_LABELS[skillId] ?? skillId,
+    subject: zone?.name ?? subjectId,
+    icon: zone?.icon ?? "📚",
+  };
+}
+
+// ── Sub-screens ───────────────────────────────────────────────────────────────
+
+function NeedsDiagnosticScreen({ student, onGo }: { student: StudentDNA; onGo: () => void }) {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center px-6 text-center gap-5">
+      <div className="text-6xl">{student.avatar}</div>
+      <div>
+        <h2 className="text-2xl font-black">أهلاً، {student.name}!</h2>
+        <p className="text-base mt-1" style={{ color: "var(--text-muted)" }}>
+          خطوة واحدة تفصلك عن عالمك التعليمي
+        </p>
+      </div>
+      <div
+        className="w-full max-w-sm rounded-2xl px-4 py-3 flex items-center gap-3"
+        style={{ background: "#FFF0D4", border: "1.5px solid var(--cream-dk)" }}
+      >
+        <span className="text-2xl">⚠️</span>
+        <div className="text-right">
+          <p className="text-sm font-black" style={{ color: "#C04010" }}>الاختبار التشخيصي غير مكتمل</p>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+            أكمله حتى يتعرف مدار على مستواك ويبني خطتك
+          </p>
+        </div>
+      </div>
+      <button
+        onClick={onGo}
+        className="w-full max-w-sm py-4 rounded-2xl font-black text-lg text-white active:scale-95 transition-transform"
+        style={{ background: "var(--primary)" }}
+      >
+        أكمل التشخيص 🎯
+      </button>
+    </div>
+  );
+}
 
 function QRModal({ onClose }: { onClose: () => void }) {
   const [url, setUrl] = useState("");
   useEffect(() => {
     const { protocol, hostname, port } = window.location;
-    setUrl(`${protocol}//${hostname}:${port || "3001"}`);
+    setUrl(`${protocol}//${hostname}:${port || "3000"}`);
   }, []);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)" }} onClick={onClose}>
       <div className="rounded-3xl p-7 text-center space-y-4 max-w-xs w-full mx-4" style={{ background: "white" }} onClick={e => e.stopPropagation()}>
-        <h3 className="text-xl font-black" style={{ color: "var(--text-main)" }}>افتح على الجوال 📱</h3>
+        <h3 className="text-xl font-black">افتح على الجوال 📱</h3>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>امسح الرمز بكاميرا الجوال</p>
         {url && <div className="flex justify-center"><div className="p-4 rounded-2xl" style={{ background: "var(--cream)" }}><QRCodeSVG value={url} size={180} level="H" /></div></div>}
         <button onClick={onClose} className="w-full rounded-2xl py-3 font-black text-white" style={{ background: "var(--primary)" }}>إغلاق</button>
@@ -30,9 +116,174 @@ function QRModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ── Home tab ──────────────────────────────────────────────────────────────────
+
+function HomeTab({
+  student,
+  onGoJourney,
+  onShowQR,
+  onGoParent,
+}: {
+  student: StudentDNA;
+  onGoJourney: (subjectId: string) => void;
+  onShowQR: () => void;
+  onGoParent: () => void;
+}) {
+  const xpMax = student.level * 200;
+  const xpPercent = Math.min(Math.round((student.xp / xpMax) * 100), 100);
+  const scores = student.diagnostic?.scores ?? {};
+  const mission = getDailyMission(student);
+  const madarMsg = getMadarMessage(student);
+  const lsInfo = student.learningStyle ? LEARNING_STYLE_LABELS[student.learningStyle] : null;
+  const completedCount = student.completedLessons.length;
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-4 pb-6">
+
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between pt-1">
+        <div>
+          <h1 className="text-2xl font-black" style={{ color: "var(--text-main)" }}>
+            أهلاً، {student.name}! {student.avatar}
+          </h1>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            {GRADE2_CURRICULUM.label}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded-full px-3 py-1 font-bold text-sm" style={{ background: "#FFF0D4", color: "#C04010" }}>
+            🔥 {student.streak}
+          </div>
+          <button onClick={onShowQR} className="w-9 h-9 rounded-full flex items-center justify-center text-lg" style={{ background: "var(--cream-dk)" }}>📱</button>
+        </div>
+      </div>
+
+      {/* ── XP & Level ── */}
+      <div className="rounded-2xl p-4" style={{ background: "white" }}>
+        <div className="flex justify-between text-sm font-bold mb-2">
+          <span>⭐ المستوى {student.level}</span>
+          <span style={{ color: "var(--text-muted)" }}>{student.xp} / {xpMax} XP</span>
+        </div>
+        <div className="h-3 rounded-full overflow-hidden" style={{ background: "var(--cream-dk)" }}>
+          <div className="h-full rounded-full transition-all" style={{ width: `${xpPercent}%`, background: "var(--primary)" }} />
+        </div>
+        <p className="text-xs mt-1.5" style={{ color: "var(--text-muted)" }}>
+          {xpPercent}% نحو المستوى {student.level + 1}
+        </p>
+      </div>
+
+      {/* ── Madar character ── */}
+      <div
+        className="rounded-3xl p-4 flex items-center gap-4"
+        style={{ background: "linear-gradient(135deg, #FF8A3D 0%, #FFB347 100%)" }}
+      >
+        <div className="text-5xl flex-shrink-0">🤖</div>
+        <div>
+          <p className="text-xs font-bold text-white opacity-80 mb-0.5">مدار يقول</p>
+          <p className="text-sm font-black text-white leading-snug">{madarMsg}</p>
+          {lsInfo && (
+            <span className="inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.25)", color: "white" }}>
+              {lsInfo.icon} متعلم {lsInfo.label}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* ── Daily mission ── */}
+      {mission && (
+        <div className="rounded-3xl p-4" style={{ background: "white" }}>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-base font-black">🎯 مهمة اليوم</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D4", color: "#C04010" }}>مهم</span>
+          </div>
+          <div className="flex items-center gap-3 rounded-2xl p-3" style={{ background: "var(--cream-md)" }}>
+            <span className="text-3xl">{mission.icon}</span>
+            <div className="flex-1">
+              <p className="text-sm font-black">تحسين مهارة: {mission.skill}</p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{mission.subject}</p>
+            </div>
+            <button
+              onClick={() => onGoJourney(ZONE_SUBJECT[student.diagnostic?.weakSkills?.[0] ?? ""] ?? "math")}
+              className="px-3 py-1.5 rounded-full text-xs font-black text-white flex-shrink-0"
+              style={{ background: "var(--primary)" }}
+            >
+              ابدأ
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Learning zones ── */}
+      <div>
+        <h2 className="text-base font-black mb-3">🗺️ مناطقك التعليمية</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {ZONES.map(zone => {
+            const score = scores[zone.subjectId];
+            const hasScore = score !== undefined;
+            const scoreColor = !hasScore ? "var(--text-muted)" : score >= 70 ? "#4FB286" : score >= 50 ? "#FFC93C" : "#E86A8E";
+            return (
+              <button
+                key={zone.subjectId}
+                onClick={() => onGoJourney(zone.subjectId)}
+                className="rounded-3xl p-4 text-right transition-transform active:scale-95 hover:scale-[1.02]"
+                style={{ background: zone.bg }}
+              >
+                <div className="text-4xl mb-2">{zone.icon}</div>
+                <div className="font-black text-sm mb-1" style={{ color: "var(--text-main)" }}>
+                  {zone.name}
+                </div>
+                {hasScore && (
+                  <div className="text-xs font-bold" style={{ color: scoreColor }}>
+                    {score >= 70 ? "✅" : score >= 50 ? "⚡" : "💪"} {score}%
+                  </div>
+                )}
+                {!hasScore && (
+                  <div className="text-xs" style={{ color: "var(--text-muted)" }}>استكشف</div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Better than yesterday ── */}
+      <div
+        className="rounded-3xl p-4 flex items-center gap-4"
+        style={{ background: "white", border: "2px solid var(--cream-dk)" }}
+      >
+        <div className="text-4xl">📈</div>
+        <div className="flex-1">
+          <p className="font-black text-sm">أنت أفضل من أمس!</p>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            {completedCount > 0
+              ? `أكملت ${completedCount} درس حتى الآن — واصل التقدم`
+              : "ابدأ أول درس اليوم وسجّل أول إنجازاتك 🚀"}
+          </p>
+        </div>
+        <div className="text-center flex-shrink-0">
+          <div className="text-2xl font-black" style={{ color: "var(--primary)" }}>{student.xp}</div>
+          <div className="text-xs" style={{ color: "var(--text-muted)" }}>XP</div>
+        </div>
+      </div>
+
+      {/* ── Parent dashboard link ── */}
+      <button
+        onClick={onGoParent}
+        className="w-full py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2"
+        style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}
+      >
+        <span>👨‍👦</span> لوحة متابعة ولي الأمر
+      </button>
+    </div>
+  );
+}
+
+// ── Main page ─────────────────────────────────────────────────────────────────
+
 export default function WorldPage() {
   const router = useRouter();
   const [student, setStudent] = useState<StudentDNA | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [selectedSubject, setSelectedSubject] = useState(GRADE2_CURRICULUM.subjects[0]);
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
@@ -42,15 +293,21 @@ export default function WorldPage() {
   useEffect(() => {
     const s = getStudent();
     if (!s) { router.replace("/"); return; }
-    if (!s.diagnostic) { router.replace("/assessment"); return; }
     setStudent(s);
+    setLoaded(true);
   }, [router]);
 
-  if (!student) return null;
+  if (!loaded || !student) return null;
 
-  const xpPercent = Math.round((student.xp / (student.level * 200)) * 100);
+  const hasDiagnostic = !!student.diagnostic;
   const subjects = GRADE2_CURRICULUM.subjects;
-  const totalLessons = subjects.reduce((a, s) => a + s.units.reduce((b, u) => b + u.lessons.length, 0), 0);
+
+  function goJourney(subjectId: string) {
+    const subj = subjects.find(s => s.id === subjectId) ?? subjects[0];
+    setSelectedSubject(subj);
+    setSelectedUnit(null);
+    setActiveTab("journey");
+  }
 
   function handleStartLesson(unitId: string, lessonId: string) {
     const data = getLesson(selectedSubject.id, unitId, lessonId);
@@ -67,7 +324,7 @@ export default function WorldPage() {
         xp: lesson?.xp || 20,
         steps: [
           { type: "intro", body: `مرحباً! سنتعلم اليوم: ${lesson?.title}` },
-          { type: "explain", title: lesson?.title, body: "سيتم إضافة محتوى هذا الدرس قريباً. 🚀" },
+          { type: "explain", title: lesson?.title, body: "سيتم إضافة محتوى هذا الدرس قريباً 🚀" },
           { type: "done" },
         ],
       });
@@ -79,7 +336,7 @@ export default function WorldPage() {
       <LessonScreen
         lesson={activeLesson as Parameters<typeof LessonScreen>[0]["lesson"]}
         onClose={() => setActiveLesson(null)}
-        onComplete={(xp) => {
+        onComplete={xp => {
           const updated = updateStudent({ xp: student.xp + xp });
           if (updated) setStudent(updated);
           setActiveLesson(null);
@@ -92,18 +349,25 @@ export default function WorldPage() {
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--cream)" }}>
       {showQR && <QRModal onClose={() => setShowQR(false)} />}
 
-      {/* Side Rail */}
-      <aside className="flex flex-col items-center gap-4 py-8 px-2 border-l" style={{ background: "var(--cream-md)", borderColor: "var(--cream-dk)", width: 70 }}>
-        <div className="text-2xl mb-2">🌟</div>
-        {([
-          { id: "home",    icon: "🏠", label: "الرئيسية" },
-          { id: "journey", icon: "🗺️", label: "رحلتي" },
-          { id: "awards",  icon: "🏆", label: "إنجازاتي" },
-          { id: "profile", icon: "👤", label: "ملفي" },
-        ] as { id: Tab; icon: string; label: string }[]).map(item => (
+      {/* ── Side Rail ── */}
+      <aside
+        className="flex flex-col items-center gap-3 py-6 px-2 border-l flex-shrink-0"
+        style={{ background: "var(--cream-md)", borderColor: "var(--cream-dk)", width: 68 }}
+      >
+        <div className="text-2xl mb-1">🌟</div>
+
+        {(hasDiagnostic
+          ? [
+              { id: "home",    icon: "🏠", label: "الرئيسية" },
+              { id: "journey", icon: "🗺️",  label: "رحلتي" },
+              { id: "awards",  icon: "🏆", label: "جوائزي" },
+              { id: "profile", icon: "👤", label: "ملفي" },
+            ]
+          : [{ id: "home", icon: "🏠", label: "الرئيسية" }]
+        ).map(item => (
           <button
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => setActiveTab(item.id as Tab)}
             title={item.label}
             className="flex flex-col items-center gap-1 rounded-2xl p-2 w-full transition-all"
             style={{
@@ -116,76 +380,44 @@ export default function WorldPage() {
           </button>
         ))}
 
-        <div className="mt-auto">
-          <button
-            onClick={() => router.push("/parent")}
-            title="لوحة ولي الأمر"
-            className="flex flex-col items-center gap-1 rounded-2xl p-2 w-full"
-            style={{ color: "var(--text-muted)" }}
-          >
-            <span className="text-xl">👨‍👦</span>
-            <span className="text-[9px] font-bold">الأهل</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 overflow-y-auto p-5">
-
-        {/* HOME */}
-        {activeTab === "home" && (
-          <div className="max-w-3xl mx-auto space-y-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-black" style={{ color: "var(--text-main)" }}>أهلاً، {student.name}! {student.avatar}</h1>
-                <p className="text-sm" style={{ color: "var(--text-muted)" }}>{GRADE2_CURRICULUM.label}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 rounded-full px-3 py-1 font-bold text-sm" style={{ background: "#FFF0D4", color: "#C04010" }}>🔥 {student.streak}</div>
-                <button onClick={() => setShowQR(true)} className="w-9 h-9 rounded-full flex items-center justify-center text-lg" style={{ background: "var(--cream-dk)" }}>📱</button>
-              </div>
-            </div>
-
-            <div className="rounded-2xl p-4" style={{ background: "var(--cream-md)" }}>
-              <div className="flex justify-between text-sm font-bold mb-2">
-                <span>المستوى {student.level} ⭐</span>
-                <span style={{ color: "var(--text-muted)" }}>{student.xp} / {student.level * 200} XP</span>
-              </div>
-              <div className="h-3 rounded-full overflow-hidden" style={{ background: "var(--track)" }}>
-                <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(xpPercent, 100)}%`, background: "var(--primary)" }} />
-              </div>
-              <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>إجمالي الدروس: {totalLessons} درس في {subjects.length} مواد</p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-black mb-3">المواد الدراسية</h2>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {subjects.map(subject => {
-                  const total = subject.units.reduce((a, u) => a + u.lessons.length, 0);
-                  return (
-                    <button
-                      key={subject.id}
-                      onClick={() => { setSelectedSubject(subject); setSelectedUnit(null); setActiveTab("journey"); }}
-                      className="rounded-2xl p-4 text-right transition-transform hover:scale-105 active:scale-95"
-                      style={{ background: subject.tint }}
-                    >
-                      <div className="text-3xl mb-2">{subject.icon}</div>
-                      <div className="font-black text-sm mb-1" style={{ color: "var(--text-main)" }}>{subject.ar}</div>
-                      <div className="text-xs" style={{ color: "var(--text-muted)" }}>{subject.units.length} وحدات · {total} درس</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <button onClick={() => setActiveTab("journey")} className="w-full rounded-2xl py-4 font-black text-lg text-white" style={{ background: "var(--primary)" }}>
-              متابعة الدراسة 🚀
+        {hasDiagnostic && (
+          <div className="mt-auto">
+            <button
+              onClick={() => router.push("/parent")}
+              title="لوحة ولي الأمر"
+              className="flex flex-col items-center gap-1 rounded-2xl p-2 w-full"
+              style={{ color: "var(--text-muted)" }}
+            >
+              <span className="text-xl">👨‍👦</span>
+              <span className="text-[9px] font-bold">الأهل</span>
             </button>
           </div>
         )}
+      </aside>
+
+      {/* ── Main content ── */}
+      <main className="flex-1 overflow-y-auto p-4">
+
+        {/* No diagnostic */}
+        {!hasDiagnostic && (
+          <NeedsDiagnosticScreen
+            student={student}
+            onGo={() => router.push("/assessment")}
+          />
+        )}
+
+        {/* HOME */}
+        {hasDiagnostic && activeTab === "home" && (
+          <HomeTab
+            student={student}
+            onGoJourney={goJourney}
+            onShowQR={() => setShowQR(true)}
+            onGoParent={() => router.push("/parent")}
+          />
+        )}
 
         {/* JOURNEY */}
-        {activeTab === "journey" && (
+        {hasDiagnostic && activeTab === "journey" && (
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="flex items-center gap-3">
               <button onClick={() => setActiveTab("home")} className="text-2xl" style={{ color: "var(--text-muted)" }}>←</button>
@@ -249,7 +481,7 @@ export default function WorldPage() {
                               <div className="text-sm font-bold">{lesson.title}</div>
                               <div className="text-xs flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
                                 +{lesson.xp} XP
-                                {hasContent && <span className="text-green-500 font-bold">● متاح</span>}
+                                {hasContent && <span style={{ color: "#4FB286" }} className="font-bold">● متاح</span>}
                               </div>
                             </div>
                             <button
@@ -271,12 +503,12 @@ export default function WorldPage() {
         )}
 
         {/* AWARDS */}
-        {activeTab === "awards" && (
+        {hasDiagnostic && activeTab === "awards" && (
           <div className="max-w-2xl mx-auto space-y-4">
             <h2 className="text-2xl font-black">إنجازاتي 🏆</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {ACHIEVEMENTS.map(a => (
-                <div key={a.id} className="rounded-2xl p-4 text-center" style={{ background: "var(--cream-md)", opacity: a.unlocked ? 1 : 0.45 }}>
+                <div key={a.id} className="rounded-2xl p-4 text-center" style={{ background: "var(--cream-md)", opacity: a.unlocked ? 1 : 0.4 }}>
                   <div className="text-4xl mb-2">{a.icon}</div>
                   <div className="font-black text-sm mb-1">{a.title}</div>
                   <div className="text-xs" style={{ color: "var(--text-muted)" }}>{a.sub}</div>
@@ -288,20 +520,20 @@ export default function WorldPage() {
         )}
 
         {/* PROFILE */}
-        {activeTab === "profile" && (
-          <div className="max-w-md mx-auto space-y-5">
-            <div className="rounded-3xl p-6 text-center" style={{ background: "var(--cream-md)" }}>
+        {hasDiagnostic && activeTab === "profile" && (
+          <div className="max-w-md mx-auto space-y-4">
+            <div className="rounded-3xl p-6 text-center" style={{ background: "white" }}>
               <div className="text-6xl mb-3">{student.avatar}</div>
               <h2 className="text-2xl font-black">{student.name}</h2>
-              <p style={{ color: "var(--text-muted)" }}>{GRADE2_CURRICULUM.label}</p>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>{GRADE2_CURRICULUM.label}</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "المستوى", value: student.level, icon: "⭐" },
-                { label: "النقاط",  value: student.xp,    icon: "🔥" },
-                { label: "الأيام",  value: student.streak, icon: "📅" },
+                { label: "المستوى", value: student.level,  icon: "⭐" },
+                { label: "النقاط",  value: student.xp,     icon: "🔥" },
+                { label: "الأيام",  value: student.streak,  icon: "📅" },
               ].map(stat => (
-                <div key={stat.label} className="rounded-2xl p-4 text-center" style={{ background: "var(--cream-md)" }}>
+                <div key={stat.label} className="rounded-2xl p-4 text-center" style={{ background: "white" }}>
                   <div className="text-2xl">{stat.icon}</div>
                   <div className="font-black text-xl">{stat.value}</div>
                   <div className="text-xs" style={{ color: "var(--text-muted)" }}>{stat.label}</div>
