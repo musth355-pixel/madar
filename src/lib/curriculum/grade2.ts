@@ -1,0 +1,502 @@
+export const GRADE2_CURRICULUM = {
+  grade: 2,
+  label: "الصف الثاني الابتدائي",
+  subjects: [
+    {
+      id: "math",
+      ar: "الرياضيات",
+      icon: "🔢",
+      color: "#FF8A3D",
+      tint: "#FFE3D6",
+      units: [
+        {
+          id: "u1",
+          title: "الأعداد حتى ١٠٠٠",
+          lessons: [
+            { id: "l1", title: "قراءة الأعداد حتى ٩٩٩", xp: 20 },
+            { id: "l2", title: "كتابة الأعداد بالأرقام والكلمات", xp: 20 },
+            { id: "l3", title: "مقارنة الأعداد وترتيبها", xp: 20 },
+            { id: "l4", title: "قيمة المنزلة (آحاد، عشرات، مئات)", xp: 25 },
+            { id: "l5", title: "تحدّي الأعداد 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "الجمع",
+          lessons: [
+            { id: "l6",  title: "الجمع بدون حمل (ثلاثة أرقام)", xp: 20 },
+            { id: "l7",  title: "الجمع مع الحمل من الآحاد", xp: 25 },
+            { id: "l8",  title: "الجمع مع الحمل من العشرات", xp: 25 },
+            { id: "l9",  title: "مسائل الجمع الكلامية", xp: 30 },
+            { id: "l10", title: "تحدّي الجمع 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "الطرح",
+          lessons: [
+            { id: "l11", title: "الطرح بدون استلاف", xp: 20 },
+            { id: "l12", title: "الطرح مع الاستلاف من العشرات", xp: 25 },
+            { id: "l13", title: "الطرح مع الاستلاف من المئات", xp: 25 },
+            { id: "l14", title: "العلاقة بين الجمع والطرح", xp: 25 },
+            { id: "l15", title: "مسائل الطرح الكلامية", xp: 30 },
+            { id: "l16", title: "تحدّي الطرح 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "الضرب",
+          lessons: [
+            { id: "l17", title: "مفهوم الضرب (جمع متكرر)", xp: 20 },
+            { id: "l18", title: "جدول ضرب ٢", xp: 25 },
+            { id: "l19", title: "جدول ضرب ٥", xp: 25 },
+            { id: "l20", title: "جدول ضرب ١٠", xp: 25 },
+            { id: "l21", title: "تحدّي الضرب 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u5",
+          title: "القياس",
+          lessons: [
+            { id: "l22", title: "قياس الطول (السنتيمتر والمتر)", xp: 20 },
+            { id: "l23", title: "قياس الكتلة (الكيلوجرام والجرام)", xp: 20 },
+            { id: "l24", title: "قياس السعة (اللتر)", xp: 20 },
+            { id: "l25", title: "الزمن (الساعة والدقيقة)", xp: 25 },
+            { id: "l26", title: "تحدّي القياس 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u6",
+          title: "الهندسة",
+          lessons: [
+            { id: "l27", title: "الأشكال الهندسية المستوية", xp: 20 },
+            { id: "l28", title: "الأشكال الهندسية المجسمة", xp: 20 },
+            { id: "l29", title: "التماثل والأنماط", xp: 25 },
+            { id: "l30", title: "تحدّي الهندسة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u7",
+          title: "الكسور",
+          lessons: [
+            { id: "l31", title: "مفهوم الكسر", xp: 20 },
+            { id: "l32", title: "النصف والربع والثلث", xp: 25 },
+            { id: "l33", title: "الكسور على خط الأعداد", xp: 25 },
+            { id: "l34", title: "تحدّي الكسور 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "arabic",
+      ar: "لغتي العربية",
+      icon: "📖",
+      color: "#E5602A",
+      tint: "#FFF0D4",
+      units: [
+        {
+          id: "u1",
+          title: "الوحدة الأولى: أنا وأسرتي",
+          lessons: [
+            { id: "l1", title: "نص: بيتنا الجميل (قراءة)", xp: 20 },
+            { id: "l2", title: "المفردات والتعبير الشفهي", xp: 20 },
+            { id: "l3", title: "الحروف والأصوات", xp: 20 },
+            { id: "l4", title: "قواعد: الجملة الاسمية", xp: 25 },
+            { id: "l5", title: "الكتابة والإملاء", xp: 25 },
+            { id: "l6", title: "تحدّي الوحدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "الوحدة الثانية: مدرستي",
+          lessons: [
+            { id: "l7",  title: "نص: في المدرسة (قراءة)", xp: 20 },
+            { id: "l8",  title: "المفردات والتعبير الشفهي", xp: 20 },
+            { id: "l9",  title: "قواعد: المبتدأ والخبر", xp: 25 },
+            { id: "l10", title: "الكتابة الإبداعية", xp: 25 },
+            { id: "l11", title: "تحدّي الوحدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "الوحدة الثالثة: بيئتي",
+          lessons: [
+            { id: "l12", title: "نص: الطبيعة الجميلة (قراءة)", xp: 20 },
+            { id: "l13", title: "المفردات والتعبير الشفهي", xp: 20 },
+            { id: "l14", title: "قواعد: الجملة الفعلية", xp: 25 },
+            { id: "l15", title: "الإملاء: الهمزة على السطر", xp: 25 },
+            { id: "l16", title: "تحدّي الوحدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "الوحدة الرابعة: وطني",
+          lessons: [
+            { id: "l17", title: "نص: أحب وطني (قراءة)", xp: 20 },
+            { id: "l18", title: "المفردات والتعبير الشفهي", xp: 20 },
+            { id: "l19", title: "قواعد: المذكر والمؤنث", xp: 25 },
+            { id: "l20", title: "الكتابة: وصف المكان", xp: 25 },
+            { id: "l21", title: "تحدّي الوحدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u5",
+          title: "الوحدة الخامسة: صحتي",
+          lessons: [
+            { id: "l22", title: "نص: جسمي وصحتي (قراءة)", xp: 20 },
+            { id: "l23", title: "المفردات والتعبير الشفهي", xp: 20 },
+            { id: "l24", title: "قواعد: المفرد والمثنى والجمع", xp: 25 },
+            { id: "l25", title: "الإملاء: التاء المربوطة والمفتوحة", xp: 25 },
+            { id: "l26", title: "تحدّي الوحدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "science",
+      ar: "العلوم",
+      icon: "🔬",
+      color: "#4FB286",
+      tint: "#DFF3E9",
+      units: [
+        {
+          id: "u1",
+          title: "الكائنات الحية",
+          lessons: [
+            { id: "l1", title: "خصائص الكائنات الحية", xp: 20 },
+            { id: "l2", title: "دورة حياة النبات", xp: 20 },
+            { id: "l3", title: "دورة حياة الحيوان", xp: 20 },
+            { id: "l4", title: "احتياجات الكائنات الحية", xp: 25 },
+            { id: "l5", title: "تحدّي الكائنات الحية 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "بيئات الحياة",
+          lessons: [
+            { id: "l6",  title: "البيئة الصحراوية", xp: 20 },
+            { id: "l7",  title: "البيئة البحرية", xp: 20 },
+            { id: "l8",  title: "الغابات والمناطق الخضراء", xp: 20 },
+            { id: "l9",  title: "تكيف الكائنات مع بيئتها", xp: 25 },
+            { id: "l10", title: "تحدّي البيئات 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "المادة وخواصها",
+          lessons: [
+            { id: "l11", title: "حالات المادة (صلب، سائل، غاز)", xp: 20 },
+            { id: "l12", title: "خواص المادة", xp: 20 },
+            { id: "l13", title: "التغيرات الفيزيائية", xp: 25 },
+            { id: "l14", title: "تحدّي المادة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "الأرض والفضاء",
+          lessons: [
+            { id: "l15", title: "كوكب الأرض وطبقاتها", xp: 20 },
+            { id: "l16", title: "الشمس والقمر", xp: 20 },
+            { id: "l17", title: "الفصول الأربعة", xp: 20 },
+            { id: "l18", title: "الطقس والمناخ", xp: 20 },
+            { id: "l19", title: "تحدّي الأرض والفضاء 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u5",
+          title: "القوى والطاقة",
+          lessons: [
+            { id: "l20", title: "مفهوم القوة والحركة", xp: 20 },
+            { id: "l21", title: "الضوء ومصادره", xp: 20 },
+            { id: "l22", title: "الصوت ومصادره", xp: 20 },
+            { id: "l23", title: "مصادر الطاقة", xp: 25 },
+            { id: "l24", title: "تحدّي القوى والطاقة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "islamic",
+      ar: "التربية الإسلامية",
+      icon: "🕌",
+      color: "#9B7EDE",
+      tint: "#F3E8FB",
+      units: [
+        {
+          id: "u1",
+          title: "التوحيد والعقيدة",
+          lessons: [
+            { id: "l1", title: "الإيمان بالله وصفاته", xp: 20 },
+            { id: "l2", title: "الإيمان بالملائكة", xp: 20 },
+            { id: "l3", title: "الإيمان بالكتب السماوية", xp: 20 },
+            { id: "l4", title: "الإيمان بالرسل", xp: 20 },
+            { id: "l5", title: "تحدّي العقيدة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "الفقه والعبادات",
+          lessons: [
+            { id: "l6",  title: "الطهارة والوضوء", xp: 20 },
+            { id: "l7",  title: "الصلاة وأوقاتها", xp: 20 },
+            { id: "l8",  title: "كيفية الصلاة", xp: 25 },
+            { id: "l9",  title: "الأذان والإقامة", xp: 20 },
+            { id: "l10", title: "تحدّي الفقه 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "السيرة النبوية",
+          lessons: [
+            { id: "l11", title: "مولد النبي ﷺ ونشأته", xp: 20 },
+            { id: "l12", title: "صفات النبي ﷺ وأخلاقه", xp: 20 },
+            { id: "l13", title: "الهجرة النبوية الشريفة", xp: 20 },
+            { id: "l14", title: "تحدّي السيرة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "الأخلاق والآداب",
+          lessons: [
+            { id: "l15", title: "آداب التعامل مع الوالدين", xp: 20 },
+            { id: "l16", title: "آداب المسجد", xp: 20 },
+            { id: "l17", title: "الصدق والأمانة", xp: 20 },
+            { id: "l18", title: "آداب الطعام والشراب", xp: 20 },
+            { id: "l19", title: "تحدّي الأخلاق 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "quran",
+      ar: "القرآن الكريم",
+      icon: "📿",
+      color: "#22a56e",
+      tint: "#d4f5e7",
+      units: [
+        {
+          id: "u1",
+          title: "أحكام التجويد",
+          lessons: [
+            { id: "l1", title: "النون الساكنة والتنوين — الإظهار", xp: 20 },
+            { id: "l2", title: "النون الساكنة والتنوين — الإدغام", xp: 20 },
+            { id: "l3", title: "النون الساكنة والتنوين — الإقلاب", xp: 20 },
+            { id: "l4", title: "النون الساكنة والتنوين — الإخفاء", xp: 25 },
+            { id: "l5", title: "تحدّي التجويد 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "سورة الفاتحة والقصار",
+          lessons: [
+            { id: "l6",  title: "سورة الفاتحة — حفظ وتلاوة", xp: 30 },
+            { id: "l7",  title: "سورة الناس — حفظ وتلاوة", xp: 25 },
+            { id: "l8",  title: "سورة الفلق — حفظ وتلاوة", xp: 25 },
+            { id: "l9",  title: "سورة الإخلاص — حفظ وتلاوة", xp: 25 },
+            { id: "l10", title: "سورة المسد — حفظ وتلاوة", xp: 25 },
+            { id: "l11", title: "سورة النصر — حفظ وتلاوة", xp: 25 },
+          ],
+        },
+        {
+          id: "u3",
+          title: "سور من جزء عمّ",
+          lessons: [
+            { id: "l12", title: "سورة الكافرون — حفظ وتلاوة", xp: 25 },
+            { id: "l13", title: "سورة الكوثر — حفظ وتلاوة", xp: 25 },
+            { id: "l14", title: "سورة الماعون — حفظ وتلاوة", xp: 25 },
+            { id: "l15", title: "سورة قريش — حفظ وتلاوة", xp: 25 },
+            { id: "l16", title: "تحدّي الحفظ 🏆", xp: 50, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "english",
+      ar: "اللغة الإنجليزية",
+      icon: "🌍",
+      color: "#5BA3D9",
+      tint: "#D6EAF8",
+      units: [
+        {
+          id: "u1",
+          title: "Unit 1: Hello Again",
+          lessons: [
+            { id: "l1", title: "Greetings and Introductions", xp: 20 },
+            { id: "l2", title: "Numbers 1–20", xp: 20 },
+            { id: "l3", title: "Colors and Shapes", xp: 20 },
+            { id: "l4", title: "Phonics: Short Vowels", xp: 25 },
+            { id: "l5", title: "Unit Quiz 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "Unit 2: My Family",
+          lessons: [
+            { id: "l6",  title: "Family Members Vocabulary", xp: 20 },
+            { id: "l7",  title: "This is / These are", xp: 20 },
+            { id: "l8",  title: "Possessive Pronouns (my, your, his, her)", xp: 25 },
+            { id: "l9",  title: "Phonics: Long Vowels", xp: 25 },
+            { id: "l10", title: "Unit Quiz 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "Unit 3: My School",
+          lessons: [
+            { id: "l11", title: "School Supplies Vocabulary", xp: 20 },
+            { id: "l12", title: "There is / There are", xp: 20 },
+            { id: "l13", title: "Prepositions of Place", xp: 25 },
+            { id: "l14", title: "Unit Quiz 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "Unit 4: Animals",
+          lessons: [
+            { id: "l15", title: "Wild and Farm Animals", xp: 20 },
+            { id: "l16", title: "Can / Can't (abilities)", xp: 25 },
+            { id: "l17", title: "Simple Sentences", xp: 20 },
+            { id: "l18", title: "Unit Quiz 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u5",
+          title: "Unit 5: Food and Health",
+          lessons: [
+            { id: "l19", title: "Food Vocabulary", xp: 20 },
+            { id: "l20", title: "I like / I don't like", xp: 20 },
+            { id: "l21", title: "Healthy vs Unhealthy Food", xp: 20 },
+            { id: "l22", title: "Unit Quiz 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "social",
+      ar: "الدراسات الاجتماعية",
+      icon: "🌿",
+      color: "#FFC93C",
+      tint: "#FFF0D4",
+      units: [
+        {
+          id: "u1",
+          title: "أنا والمجتمع",
+          lessons: [
+            { id: "l1", title: "الهوية الوطنية السعودية", xp: 20 },
+            { id: "l2", title: "العلم والنشيد الوطني", xp: 20 },
+            { id: "l3", title: "الأسرة والمجتمع", xp: 20 },
+            { id: "l4", title: "تحدّي الهوية 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "وطننا الغالي",
+          lessons: [
+            { id: "l5", title: "المملكة العربية السعودية — الموقع والحدود", xp: 20 },
+            { id: "l6", title: "مناطق المملكة العربية السعودية", xp: 25 },
+            { id: "l7", title: "مدن المملكة الكبرى", xp: 20 },
+            { id: "l8", title: "تحدّي الوطن 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "التاريخ والحضارة",
+          lessons: [
+            { id: "l9",  title: "تاريخ المملكة العربية السعودية", xp: 20 },
+            { id: "l10", title: "اليوم الوطني ومناسبات الوطن", xp: 20 },
+            { id: "l11", title: "رؤية ٢٠٣٠", xp: 25 },
+            { id: "l12", title: "تحدّي التاريخ 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u4",
+          title: "البيئة الجغرافية",
+          lessons: [
+            { id: "l13", title: "التضاريس (جبال، صحاري، سهول)", xp: 20 },
+            { id: "l14", title: "المناخ في المملكة", xp: 20 },
+            { id: "l15", title: "الموارد الطبيعية", xp: 20 },
+            { id: "l16", title: "تحدّي البيئة 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "tech",
+      ar: "الحاسب والتقنية",
+      icon: "💻",
+      color: "#7AC4D9",
+      tint: "#D6EFF5",
+      units: [
+        {
+          id: "u1",
+          title: "مكونات الحاسب",
+          lessons: [
+            { id: "l1", title: "أجزاء الحاسب الآلي", xp: 20 },
+            { id: "l2", title: "وحدات الإدخال والإخراج", xp: 20 },
+            { id: "l3", title: "كيفية تشغيل الحاسب وإيقافه", xp: 20 },
+            { id: "l4", title: "تحدّي مكونات الحاسب 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "استخدام الحاسب",
+          lessons: [
+            { id: "l5", title: "سطح المكتب والنوافذ", xp: 20 },
+            { id: "l6", title: "الماوس ولوحة المفاتيح", xp: 20 },
+            { id: "l7", title: "برامج الرسم البسيطة", xp: 25 },
+            { id: "l8", title: "تحدّي الاستخدام 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u3",
+          title: "الإنترنت والسلامة الرقمية",
+          lessons: [
+            { id: "l9",  title: "ما هو الإنترنت؟", xp: 20 },
+            { id: "l10", title: "السلامة الرقمية وحماية المعلومات", xp: 25 },
+            { id: "l11", title: "الاستخدام الآمن للأجهزة", xp: 20 },
+            { id: "l12", title: "تحدّي الإنترنت 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "arts",
+      ar: "التربية الفنية",
+      icon: "🎨",
+      color: "#E86A8E",
+      tint: "#FCE3EA",
+      units: [
+        {
+          id: "u1",
+          title: "عناصر الفن",
+          lessons: [
+            { id: "l1", title: "الألوان الأساسية والثانوية", xp: 20 },
+            { id: "l2", title: "الخطوط وأنواعها", xp: 20 },
+            { id: "l3", title: "الأشكال والملمس", xp: 20 },
+            { id: "l4", title: "تحدّي عناصر الفن 🏆", xp: 40, type: "quiz" },
+          ],
+        },
+        {
+          id: "u2",
+          title: "الرسم والتلوين",
+          lessons: [
+            { id: "l5", title: "رسم الطبيعة (نباتات وحيوانات)", xp: 25 },
+            { id: "l6", title: "رسم الأشكال الهندسية", xp: 20 },
+            { id: "l7", title: "التلوين بالألوان المائية", xp: 25 },
+            { id: "l8", title: "التلوين بألوان الخشب", xp: 20 },
+          ],
+        },
+        {
+          id: "u3",
+          title: "الفنون التطبيقية",
+          lessons: [
+            { id: "l9",  title: "الطي والقص واللصق", xp: 20 },
+            { id: "l10", title: "صنع الأشكال الورقية", xp: 25 },
+            { id: "l11", title: "الزخرفة الإسلامية البسيطة", xp: 25 },
+            { id: "l12", title: "مشروع فني إبداعي 🏆", xp: 50, type: "quiz" },
+          ],
+        },
+      ],
+    },
+  ],
+};
