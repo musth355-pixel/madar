@@ -39,6 +39,13 @@ export default function RegisterPage() {
       level: 1,
       streak: 0,
       completedLessons: [],
+      // Student DNA — populated after diagnostic
+      learningStyle: null,
+      confidenceScore: 0,
+      selfLearningScore: 0,
+      focusLevel: null,
+      skillMastery: {},
+      riskPredictions: [],
     };
     saveStudent(student);
     router.push("/assessment");
@@ -56,7 +63,6 @@ export default function RegisterPage() {
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-8 max-w-md mx-auto w-full">
 
-        {/* Back */}
         {stepIndex > 0 && (
           <button
             onClick={() => setStep(steps[stepIndex - 1])}
@@ -172,7 +178,7 @@ export default function RegisterPage() {
               <div className="text-5xl mb-3">✨</div>
               <h2 className="text-2xl font-black">ما اهتماماتك؟</h2>
               <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
-                اختر حتى ٤ اهتمامات — سيشرح مدار الدروس بأسلوبك المفضل
+                اختر حتى ٤ — يشرح مدار الدروس بأسلوبك المفضل
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -197,9 +203,9 @@ export default function RegisterPage() {
             </div>
             <button
               onClick={finish}
+              disabled={interests.length === 0}
               className="w-full py-4 rounded-2xl font-black text-lg text-white transition-opacity"
               style={{ background: "var(--primary)", opacity: interests.length > 0 ? 1 : 0.4 }}
-              disabled={interests.length === 0}
             >
               ابدأ الاختبار 🎯
             </button>

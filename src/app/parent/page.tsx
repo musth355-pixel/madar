@@ -27,7 +27,7 @@ export default function ParentPage() {
     if (!s) { setStudent(null); return; }
     setStudent(s);
     if (s.diagnostic) {
-      setHealth(computeAcademicHealth(s.diagnostic));
+      setHealth(computeAcademicHealth(s));
     }
   }, []);
 
