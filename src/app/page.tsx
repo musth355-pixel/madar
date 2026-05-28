@@ -7,6 +7,46 @@ import type { StudentDNA } from "@/lib/types";
 
 type State = "loading" | "guest" | "needs-assessment" | "ready";
 
+// ── Logo ──────────────────────────────────────────────────────────────────────
+
+function MadarLogo() {
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
+      {/* Dashed orbit ring */}
+      <svg viewBox="0 0 120 120" className="absolute inset-0 w-full h-full">
+        <circle
+          cx="60" cy="60" r="56"
+          fill="none"
+          stroke="#FF8A3D"
+          strokeWidth="2"
+          strokeDasharray="5 5"
+          opacity="0.35"
+        />
+        {/* Orbiting dot */}
+        <circle cx="60" cy="4" r="5" fill="#FF8A3D" opacity="0.7" />
+        <circle cx="116" cy="60" r="3.5" fill="#FFB347" opacity="0.5" />
+      </svg>
+      {/* Center circle */}
+      <div
+        className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg"
+        style={{ background: "linear-gradient(135deg, #FF8A3D 0%, #FFB347 100%)" }}
+      >
+        <span style={{ fontSize: 38 }}>🌟</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Feature pills ─────────────────────────────────────────────────────────────
+
+const FEATURES = [
+  { icon: "🧠", label: "تشخيص ذكي" },
+  { icon: "🗺️", label: "خطة شخصية" },
+  { icon: "🏆", label: "تعلّم ممتع" },
+];
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
 export default function Home() {
   const router = useRouter();
   const [state, setState] = useState<State>("loading");
@@ -25,134 +65,140 @@ export default function Home() {
     }
   }, []);
 
-  return (
-    <div className="min-h-screen flex flex-col" style={{ background: "var(--cream)" }}>
+  const ctaLabel =
+    state === "guest"            ? "ابدأ الرحلة 🚀"             :
+    state === "needs-assessment" ? "أكمل التشخيص 🎯"           :
+    state === "ready"            ? "ادخل إلى عالم مدار 🌟"     : "";
 
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4">
-        <span className="text-2xl font-black" style={{ color: "var(--primary)" }}>مدار</span>
+  const ctaRoute =
+    state === "guest"            ? "/register"   :
+    state === "needs-assessment" ? "/assessment" :
+    state === "ready"            ? "/world"      : "/";
+
+  return (
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: "var(--cream)" }}
+    >
+      {/* ── Top bar ── */}
+      <header className="flex items-center justify-end px-5 pt-5">
         <button
           onClick={() => router.push("/parent")}
-          className="text-sm font-bold px-4 py-2 rounded-full"
+          className="text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
           style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}
         >
-          لوحة ولي الأمر
+          <span>👨‍👦</span> لوحة ولي الأمر
         </button>
       </header>
 
-      {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center gap-6 pb-16">
+      {/* ── Hero ── */}
+      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center gap-5 pb-10">
 
+        {/* Loading */}
         {state === "loading" && (
-          <div className="text-4xl animate-bounce">🌟</div>
+          <div className="text-5xl animate-bounce">🌟</div>
         )}
 
         {state !== "loading" && (
           <>
-            <div className="text-7xl mb-2">
-              {state === "ready" ? student?.avatar ?? "🌟" : "🌟"}
-            </div>
+            {/* Logo */}
+            <MadarLogo />
 
+            {/* App name */}
             <div>
-              {state === "guest" && (
-                <>
-                  <h1 className="text-4xl font-black leading-tight mb-3" style={{ color: "var(--text-main)" }}>
-                    عالمك التعليمي<br />
-                    <span style={{ color: "var(--primary)" }}>ينتظرك</span>
-                  </h1>
-                  <p className="text-lg max-w-sm mx-auto" style={{ color: "var(--text-muted)" }}>
-                    معلّم ذكي يعرفك، يشخّص نقاط ضعفك، ويبني معك خطة للتميّز
-                  </p>
-                </>
-              )}
-
-              {state === "needs-assessment" && (
-                <>
-                  <h1 className="text-3xl font-black leading-tight mb-3" style={{ color: "var(--text-main)" }}>
-                    أهلاً، {student?.name}!
-                  </h1>
-                  <p className="text-lg max-w-sm mx-auto" style={{ color: "var(--text-muted)" }}>
-                    خطوة واحدة تفصلك عن عالمك التعليمي
-                  </p>
-                </>
-              )}
-
-              {state === "ready" && (
-                <>
-                  <h1 className="text-3xl font-black leading-tight mb-3" style={{ color: "var(--text-main)" }}>
-                    مرحباً بعودتك،<br />
-                    <span style={{ color: "var(--primary)" }}>{student?.name}!</span>
-                  </h1>
-                  <p className="text-lg max-w-sm mx-auto" style={{ color: "var(--text-muted)" }}>
-                    عالمك التعليمي جاهز — واصل رحلتك
-                  </p>
-                </>
-              )}
+              <h1
+                className="text-5xl font-black tracking-tight"
+                style={{ color: "var(--primary)" }}
+              >
+                مدار
+              </h1>
+              <p
+                className="text-base mt-2 max-w-xs mx-auto leading-relaxed"
+                style={{ color: "var(--text-muted)" }}
+              >
+                معلم ذكي يكتشف طريقة تعلّم طفلك<br />
+                ويبني له رحلة تعليمية شخصية
+              </p>
             </div>
 
-            {/* Feature cards — show only for guests */}
+            {/* ── Guest: feature pills ── */}
             {state === "guest" && (
-              <div className="grid grid-cols-3 gap-4 w-full max-w-sm my-2">
-                {[
-                  { icon: "🧠", label: "تشخيص ذكي" },
-                  { icon: "🗺️", label: "خطة شخصية" },
-                  { icon: "🏆", label: "إنجازات ممتعة" },
-                ].map(f => (
-                  <div key={f.label} className="rounded-2xl p-3 text-center" style={{ background: "var(--cream-md)" }}>
-                    <div className="text-2xl mb-1">{f.icon}</div>
-                    <div className="text-xs font-bold" style={{ color: "var(--text-muted)" }}>{f.label}</div>
+              <div className="flex gap-3 flex-wrap justify-center">
+                {FEATURES.map(f => (
+                  <div
+                    key={f.label}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold"
+                    style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}
+                  >
+                    <span>{f.icon}</span>
+                    {f.label}
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Assessment warning banner */}
-            {state === "needs-assessment" && (
-              <div
-                className="w-full max-w-sm rounded-2xl px-4 py-3 flex items-center gap-3 text-right"
-                style={{ background: "#FFF0D4", border: "1.5px solid #FFD89E" }}
-              >
-                <span className="text-2xl flex-shrink-0">⚠️</span>
-                <div>
-                  <p className="text-sm font-black" style={{ color: "#C04010" }}>الاختبار التشخيصي غير مكتمل</p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                    أكمل الاختبار حتى يتعرف مدار على مستواك
-                  </p>
+            {/* ── Needs assessment: warning + student card ── */}
+            {state === "needs-assessment" && student && (
+              <div className="w-full max-w-xs space-y-3">
+                {/* Student chip */}
+                <div
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3"
+                  style={{ background: "white" }}
+                >
+                  <span className="text-3xl">{student.avatar}</span>
+                  <div className="text-right">
+                    <p className="font-black text-sm">{student.name}</p>
+                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>مسجّل — التشخيص غير مكتمل</p>
+                  </div>
+                </div>
+                {/* Warning */}
+                <div
+                  className="flex items-start gap-2.5 rounded-2xl px-4 py-3 text-right"
+                  style={{ background: "#FFF0D4", border: "1.5px solid #FFD89E" }}
+                >
+                  <span className="text-lg flex-shrink-0">⚠️</span>
+                  <div>
+                    <p className="text-sm font-black" style={{ color: "#C04010" }}>الاختبار التشخيصي غير مكتمل</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                      أكمله حتى يتعرف مدار على مستوى {student.name}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Primary CTA */}
-            {state === "guest" && (
-              <button
-                onClick={() => router.push("/register")}
-                className="w-full max-w-sm py-4 rounded-2xl text-lg font-black text-white shadow-lg transition-transform active:scale-95"
-                style={{ background: "var(--primary)" }}
+            {/* ── Ready: returning student card ── */}
+            {state === "ready" && student && (
+              <div
+                className="w-full max-w-xs rounded-3xl px-5 py-4 flex items-center gap-4"
+                style={{ background: "white" }}
               >
-                ابدأ رحلتك 🚀
-              </button>
+                <div className="text-4xl">{student.avatar}</div>
+                <div className="text-right flex-1">
+                  <p className="font-black">أهلاً، {student.name}!</p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                    المستوى {student.level} · {student.xp} XP · 🔥 {student.streak}
+                  </p>
+                </div>
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: "var(--cream-md)" }}
+                >
+                  <span className="text-sm">✓</span>
+                </div>
+              </div>
             )}
 
-            {state === "needs-assessment" && (
-              <button
-                onClick={() => router.push("/assessment")}
-                className="w-full max-w-sm py-4 rounded-2xl text-lg font-black text-white shadow-lg transition-transform active:scale-95"
-                style={{ background: "var(--primary)" }}
-              >
-                أكمل التشخيص 🎯
-              </button>
-            )}
+            {/* ── Primary CTA ── */}
+            <button
+              onClick={() => router.push(ctaRoute)}
+              className="w-full max-w-xs py-4 rounded-2xl text-lg font-black text-white transition-transform active:scale-95"
+              style={{ background: "var(--primary)" }}
+            >
+              {ctaLabel}
+            </button>
 
-            {state === "ready" && (
-              <button
-                onClick={() => router.push("/world")}
-                className="w-full max-w-sm py-4 rounded-2xl text-lg font-black text-white shadow-lg transition-transform active:scale-95"
-                style={{ background: "var(--primary)" }}
-              >
-                ادخل إلى عالم مدار 🌟
-              </button>
-            )}
-
+            {/* ── Footer note ── */}
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>
               مناهج المرحلة الابتدائية السعودية · ذكاء اصطناعي
             </p>
