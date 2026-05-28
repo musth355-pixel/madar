@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { GRADE2_CURRICULUM } from "@/lib/curriculum/grade2";
 import { USER, ACHIEVEMENTS } from "@/lib/data";
 import LessonScreen from "@/components/LessonScreen";
@@ -8,12 +9,53 @@ import { getLesson } from "@/lib/lessons/index";
 
 type Tab = "home" | "journey" | "awards" | "profile";
 
+function QRModal({ onClose }: { onClose: () => void }) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    const { protocol, hostname, port } = window.location;
+    setUrl(`${protocol}//${hostname}:${port || "3001"}`);
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: "rgba(0,0,0,0.6)" }}
+      onClick={onClose}
+    >
+      <div
+        className="rounded-3xl p-7 text-center space-y-4 max-w-xs w-full mx-4"
+        style={{ background: "white", animation: "pop 0.3s ease" }}
+        onClick={e => e.stopPropagation()}
+      >
+        <h3 className="text-xl font-black" style={{ color: "var(--text-main)" }}>افتح على الجوال 📱</h3>
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>امسح الرمز بكاميرا الجوال وتأكد أنك على نفس الواي فاي</p>
+        {url && (
+          <div className="flex justify-center">
+            <div className="p-4 rounded-2xl" style={{ background: "var(--cream)" }}>
+              <QRCodeSVG value={url} size={180} level="H" />
+            </div>
+          </div>
+        )}
+        <p className="text-xs font-bold break-all" style={{ color: "var(--text-muted)" }}>{url}</p>
+        <button
+          onClick={onClose}
+          className="w-full rounded-2xl py-3 font-black text-white"
+          style={{ background: "var(--primary)" }}
+        >
+          إغلاق
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [selectedSubject, setSelectedSubject] = useState(GRADE2_CURRICULUM.subjects[0]);
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
   const [activeLesson, setActiveLesson] = useState<ReturnType<typeof getLesson>>(null);
   const [user, setUser] = useState(USER);
+  const [showQR, setShowQR] = useState(false);
 
   const xpPercent = Math.round((user.xp / user.nextXp) * 100);
   const subjects = GRADE2_CURRICULUM.subjects;
@@ -56,6 +98,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--cream)" }}>
+      {showQR && <QRModal onClose={() => setShowQR(false)} />}
 
       {/* Side Rail */}
       <aside className="flex flex-col items-center gap-4 py-8 px-2 border-l" style={{ background: "var(--cream-md)", borderColor: "var(--cream-dk)", width: 70 }}>
@@ -95,6 +138,14 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 rounded-full px-3 py-1 font-bold text-sm" style={{ background: "#FFF0D4", color: "#C04010" }}>🔥 {user.streak}</div>
+                <button
+                  onClick={() => setShowQR(true)}
+                  title="افتح على الجوال"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-lg transition-transform hover:scale-110 active:scale-95"
+                  style={{ background: "var(--cream-dk)" }}
+                >
+                  📱
+                </button>
                 <div className="w-9 h-9 rounded-full flex items-center justify-center text-xl" style={{ background: "var(--cream-dk)" }}>{user.avatar}</div>
               </div>
             </div>
