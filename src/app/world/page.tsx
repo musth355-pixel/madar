@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { QRCodeSVG } from "qrcode.react";
 import { GRADE2_CURRICULUM } from "@/lib/curriculum/grade2";
 import { ACHIEVEMENTS } from "@/lib/data";
 import LessonScreen from "@/components/LessonScreen";
@@ -13,152 +12,97 @@ import type { StudentDNA } from "@/lib/types";
 
 type Tab = "home" | "journey" | "awards" | "profile";
 
-// ── Lookup data ───────────────────────────────────────────────────────────────
-
 const ZONES = [
   { subjectId: "math",    name: "محطة الرياضيات",  icon: "🔢", bg: "#FFE3D6", color: "#FF8A3D" },
   { subjectId: "arabic",  name: "واحة لغتي",        icon: "📖", bg: "#FFF0D4", color: "#E5602A" },
   { subjectId: "science", name: "مختبر العلوم",     icon: "🔬", bg: "#DFF3E9", color: "#4FB286" },
-  { subjectId: "english", name: "عالم الإنجليزية",  icon: "🌍", bg: "#D6EAF8", color: "#5BA3D9" },
+  { subjectId: "english", name: "جزيرة الإنجليزية", icon: "🌍", bg: "#D6EAF8", color: "#5BA3D9" },
 ];
 
 const SKILL_LABELS: Record<string, string> = {
-  "math.addition":     "الجمع",
-  "math.subtraction":  "الطرح",
-  "math.geometry":     "الأشكال الهندسية",
-  "math.numbers":      "الأرقام والتسلسل",
-  "arabic.phonics":    "الحروف والأصوات",
-  "arabic.grammar":    "القواعد والصرف",
+  "math.addition": "الجمع", "math.subtraction": "الطرح",
+  "math.geometry": "الأشكال الهندسية", "math.numbers": "الأرقام والتسلسل",
+  "arabic.phonics": "الحروف والأصوات", "arabic.grammar": "القواعد والصرف",
   "arabic.vocabulary": "المفردات والمعاني",
-  "science.animals":   "عالم الحيوان",
-  "science.plants":    "عالم النبات",
+  "science.animals": "عالم الحيوان", "science.plants": "عالم النبات",
 };
 
-const ZONE_SUBJECT: Record<string, string> = {
-  "math.addition": "math", "math.subtraction": "math",
-  "math.geometry": "math", "math.numbers": "math",
+const ZONE_BY_SKILL: Record<string, string> = {
+  "math.addition": "math", "math.subtraction": "math", "math.geometry": "math", "math.numbers": "math",
   "arabic.phonics": "arabic", "arabic.grammar": "arabic", "arabic.vocabulary": "arabic",
   "science.animals": "science", "science.plants": "science",
 };
 
 function getMadarMessage(student: StudentDNA): string {
   const style = student.learningStyle;
-  if (style === "visual")      return "سأريك صوراً ورسوماً تجعل كل درس ممتعاً! 🎨";
-  if (style === "auditory")    return "استمع جيداً وستتذكر كل شيء بسهولة! 🎧";
-  if (style === "kinesthetic") return "جرّب بنفسك — التجربة أفضل معلم! ✋";
-  if (style === "reading")     return "كل كلمة تقرأها تزيدك ذكاءً! 📖";
-  return "أنا هنا لأساعدك في كل خطوة! 🌟";
+  const name = student.name;
+  if (style === "visual")      return `${name}، سأريك صوراً ورسوماً تجعل كل درس ممتعاً! 🎨`;
+  if (style === "auditory")    return `${name}، استمع جيداً وستتذكر كل شيء بسهولة! 🎧`;
+  if (style === "kinesthetic") return `${name}، جرّب بنفسك — التجربة أفضل معلم! ✋`;
+  if (style === "reading")     return `${name}، كل كلمة تقرأها تزيدك ذكاءً! 📖`;
+  return `أهلاً ${name}! أنا هنا لأساعدك في كل خطوة 🌟`;
 }
 
-function getDailyMission(student: StudentDNA): { skill: string; subject: string; icon: string } | null {
-  const weakSkills = student.diagnostic?.weakSkills ?? [];
-  if (!weakSkills.length) return null;
-  const skillId = weakSkills[0];
-  const subjectId = ZONE_SUBJECT[skillId] ?? "math";
-  const zone = ZONES.find(z => z.subjectId === subjectId);
-  return {
-    skill: SKILL_LABELS[skillId] ?? skillId,
-    subject: zone?.name ?? subjectId,
-    icon: zone?.icon ?? "📚",
-  };
-}
+// ── No diagnostic screen ──────────────────────────────────────────────────────
 
-// ── Sub-screens ───────────────────────────────────────────────────────────────
-
-function NeedsDiagnosticScreen({ student, onGo }: { student: StudentDNA; onGo: () => void }) {
+function NeedsDiagnostic({ student, onGo }: { student: StudentDNA; onGo: () => void }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 text-center gap-5">
       <div className="text-6xl">{student.avatar}</div>
       <div>
         <h2 className="text-2xl font-black">أهلاً، {student.name}!</h2>
         <p className="text-base mt-1" style={{ color: "var(--text-muted)" }}>
-          خطوة واحدة تفصلك عن عالمك التعليمي
+          خطوة واحدة تفصلك عن عالمك
         </p>
       </div>
-      <div
-        className="w-full max-w-sm rounded-2xl px-4 py-3 flex items-center gap-3"
-        style={{ background: "#FFF0D4", border: "1.5px solid var(--cream-dk)" }}
-      >
-        <span className="text-2xl">⚠️</span>
-        <div className="text-right">
-          <p className="text-sm font-black" style={{ color: "#C04010" }}>الاختبار التشخيصي غير مكتمل</p>
-          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-            أكمله حتى يتعرف مدار على مستواك ويبني خطتك
-          </p>
-        </div>
+      <div className="w-full max-w-sm rounded-2xl px-4 py-3 flex items-start gap-3 text-right"
+        style={{ background: "#FFF0D4", border: "1.5px solid #FFD89E" }}>
+        <span className="text-xl">⚠️</span>
+        <p className="text-sm" style={{ color: "#C04010" }}>
+          أكمل اكتشاف قدراتك حتى ينطلق مدار في رحلتك!
+        </p>
       </div>
-      <button
-        onClick={onGo}
+      <button onClick={onGo}
         className="w-full max-w-sm py-4 rounded-2xl font-black text-lg text-white active:scale-95 transition-transform"
-        style={{ background: "var(--primary)" }}
-      >
-        أكمل التشخيص 🎯
+        style={{ background: "var(--primary)" }}>
+        أكمل اكتشاف قدراتك 🎯
       </button>
-    </div>
-  );
-}
-
-function QRModal({ onClose }: { onClose: () => void }) {
-  const [url, setUrl] = useState("");
-  useEffect(() => {
-    const { protocol, hostname, port } = window.location;
-    setUrl(`${protocol}//${hostname}:${port || "3000"}`);
-  }, []);
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)" }} onClick={onClose}>
-      <div className="rounded-3xl p-7 text-center space-y-4 max-w-xs w-full mx-4" style={{ background: "white" }} onClick={e => e.stopPropagation()}>
-        <h3 className="text-xl font-black">افتح على الجوال 📱</h3>
-        <p className="text-sm" style={{ color: "var(--text-muted)" }}>امسح الرمز بكاميرا الجوال</p>
-        {url && <div className="flex justify-center"><div className="p-4 rounded-2xl" style={{ background: "var(--cream)" }}><QRCodeSVG value={url} size={180} level="H" /></div></div>}
-        <button onClick={onClose} className="w-full rounded-2xl py-3 font-black text-white" style={{ background: "var(--primary)" }}>إغلاق</button>
-      </div>
     </div>
   );
 }
 
 // ── Home tab ──────────────────────────────────────────────────────────────────
 
-function HomeTab({
-  student,
-  onGoJourney,
-  onShowQR,
-  onGoParent,
-}: {
+function HomeTab({ student, onGoJourney, onStartMission }: {
   student: StudentDNA;
   onGoJourney: (subjectId: string) => void;
-  onShowQR: () => void;
-  onGoParent: () => void;
+  onStartMission: () => void;
 }) {
   const xpMax = student.level * 200;
   const xpPercent = Math.min(Math.round((student.xp / xpMax) * 100), 100);
   const scores = student.diagnostic?.scores ?? {};
-  const mission = getDailyMission(student);
-  const madarMsg = getMadarMessage(student);
-  const lsInfo = student.learningStyle ? LEARNING_STYLE_LABELS[student.learningStyle] : null;
-  const completedCount = student.completedLessons.length;
+  const weakSkillId = student.diagnostic?.weakSkills?.[0];
+  const missionSkill = weakSkillId ? SKILL_LABELS[weakSkillId] : null;
+  const missionZone = weakSkillId ? ZONES.find(z => z.subjectId === ZONE_BY_SKILL[weakSkillId]) : null;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4 pb-6">
+    <div className="max-w-lg mx-auto space-y-4 pb-8">
 
-      {/* ── Header ── */}
+      {/* Header */}
       <div className="flex items-center justify-between pt-1">
         <div>
-          <h1 className="text-2xl font-black" style={{ color: "var(--text-main)" }}>
-            أهلاً، {student.name}! {student.avatar}
-          </h1>
+          <h1 className="text-2xl font-black">{student.avatar} أهلاً، {student.name}!</h1>
           <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
             {GRADE2_CURRICULUM.label}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 rounded-full px-3 py-1 font-bold text-sm" style={{ background: "#FFF0D4", color: "#C04010" }}>
-            🔥 {student.streak}
-          </div>
-          <button onClick={onShowQR} className="w-9 h-9 rounded-full flex items-center justify-center text-lg" style={{ background: "var(--cream-dk)" }}>📱</button>
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-sm"
+          style={{ background: "#FFF0D4", color: "#C04010" }}>
+          🔥 {student.streak}
         </div>
       </div>
 
-      {/* ── XP & Level ── */}
+      {/* XP Bar */}
       <div className="rounded-2xl p-4" style={{ background: "white" }}>
         <div className="flex justify-between text-sm font-bold mb-2">
           <span>⭐ المستوى {student.level}</span>
@@ -172,92 +116,82 @@ function HomeTab({
         </p>
       </div>
 
-      {/* ── Madar character ── */}
-      <div
-        className="rounded-3xl p-4 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #FF8A3D 0%, #FFB347 100%)" }}
-      >
+      {/* Madar character */}
+      <div className="rounded-3xl p-4 flex items-center gap-4"
+        style={{ background: "linear-gradient(135deg, #FF8A3D 0%, #FFB347 100%)" }}>
         <div className="text-5xl flex-shrink-0">🤖</div>
         <div>
-          <p className="text-xs font-bold text-white opacity-80 mb-0.5">مدار يقول</p>
-          <p className="text-sm font-black text-white leading-snug">{madarMsg}</p>
-          {lsInfo && (
-            <span className="inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.25)", color: "white" }}>
-              {lsInfo.icon} متعلم {lsInfo.label}
+          <p className="text-xs font-bold text-white opacity-75 mb-0.5">مدار يقول</p>
+          <p className="text-sm font-black text-white leading-snug">{getMadarMessage(student)}</p>
+          {student.learningStyle && (
+            <span className="inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full"
+              style={{ background: "rgba(255,255,255,0.25)", color: "white" }}>
+              {LEARNING_STYLE_LABELS[student.learningStyle].icon} متعلم {LEARNING_STYLE_LABELS[student.learningStyle].label}
             </span>
           )}
         </div>
       </div>
 
-      {/* ── Daily mission ── */}
-      {mission && (
+      {/* Daily mission */}
+      {missionSkill && missionZone && (
         <div className="rounded-3xl p-4" style={{ background: "white" }}>
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-base font-black">🎯 مهمة اليوم</span>
-            <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D4", color: "#C04010" }}>مهم</span>
+            <span className="font-black text-base">🎯 مهمة اليوم</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+              style={{ background: "#FFF0D4", color: "#C04010" }}>مهم</span>
           </div>
           <div className="flex items-center gap-3 rounded-2xl p-3" style={{ background: "var(--cream-md)" }}>
-            <span className="text-3xl">{mission.icon}</span>
+            <span className="text-3xl">{missionZone.icon}</span>
             <div className="flex-1">
-              <p className="text-sm font-black">تحسين مهارة: {mission.skill}</p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{mission.subject}</p>
+              <p className="text-sm font-black">تحسين مهارة: {missionSkill}</p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{missionZone.name}</p>
             </div>
-            <button
-              onClick={() => onGoJourney(ZONE_SUBJECT[student.diagnostic?.weakSkills?.[0] ?? ""] ?? "math")}
-              className="px-3 py-1.5 rounded-full text-xs font-black text-white flex-shrink-0"
-              style={{ background: "var(--primary)" }}
-            >
-              ابدأ
-            </button>
           </div>
+          <button onClick={onStartMission}
+            className="w-full mt-3 py-3 rounded-2xl font-black text-white active:scale-95 transition-transform"
+            style={{ background: missionZone.color }}>
+            ابدأ مهمة اليوم ✨
+          </button>
         </div>
       )}
 
-      {/* ── Learning zones ── */}
+      {/* World map zones */}
       <div>
-        <h2 className="text-base font-black mb-3">🗺️ مناطقك التعليمية</h2>
+        <h2 className="font-black text-base mb-3">🗺️ خريطة عالم مدار</h2>
         <div className="grid grid-cols-2 gap-3">
           {ZONES.map(zone => {
             const score = scores[zone.subjectId];
             const hasScore = score !== undefined;
             const scoreColor = !hasScore ? "var(--text-muted)" : score >= 70 ? "#4FB286" : score >= 50 ? "#FFC93C" : "#E86A8E";
             return (
-              <button
-                key={zone.subjectId}
+              <button key={zone.subjectId}
                 onClick={() => onGoJourney(zone.subjectId)}
                 className="rounded-3xl p-4 text-right transition-transform active:scale-95 hover:scale-[1.02]"
-                style={{ background: zone.bg }}
-              >
+                style={{ background: zone.bg }}>
                 <div className="text-4xl mb-2">{zone.icon}</div>
-                <div className="font-black text-sm mb-1" style={{ color: "var(--text-main)" }}>
-                  {zone.name}
-                </div>
-                {hasScore && (
-                  <div className="text-xs font-bold" style={{ color: scoreColor }}>
-                    {score >= 70 ? "✅" : score >= 50 ? "⚡" : "💪"} {score}%
-                  </div>
-                )}
-                {!hasScore && (
-                  <div className="text-xs" style={{ color: "var(--text-muted)" }}>استكشف</div>
-                )}
+                <div className="font-black text-sm mb-1" style={{ color: "var(--text-main)" }}>{zone.name}</div>
+                {hasScore
+                  ? <div className="text-xs font-bold" style={{ color: scoreColor }}>
+                      {score >= 70 ? "✅" : score >= 50 ? "⚡" : "💪"} {score}%
+                    </div>
+                  : <div className="text-xs" style={{ color: "var(--text-muted)" }}>استكشف</div>
+                }
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* ── Better than yesterday ── */}
-      <div
-        className="rounded-3xl p-4 flex items-center gap-4"
-        style={{ background: "white", border: "2px solid var(--cream-dk)" }}
-      >
+      {/* Better than yesterday */}
+      <div className="rounded-3xl p-4 flex items-center gap-4"
+        style={{ background: "white", border: "2px solid var(--cream-dk)" }}>
         <div className="text-4xl">📈</div>
         <div className="flex-1">
           <p className="font-black text-sm">أنت أفضل من أمس!</p>
           <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-            {completedCount > 0
-              ? `أكملت ${completedCount} درس حتى الآن — واصل التقدم`
-              : "ابدأ أول درس اليوم وسجّل أول إنجازاتك 🚀"}
+            {student.completedLessons.length > 0
+              ? `أكملت ${student.completedLessons.length} درس حتى الآن — استمر!`
+              : "ابدأ مهمتك اليوم وسجّل أول إنجازاتك 🚀"}
           </p>
         </div>
         <div className="text-center flex-shrink-0">
@@ -265,20 +199,11 @@ function HomeTab({
           <div className="text-xs" style={{ color: "var(--text-muted)" }}>XP</div>
         </div>
       </div>
-
-      {/* ── Parent dashboard link ── */}
-      <button
-        onClick={onGoParent}
-        className="w-full py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2"
-        style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}
-      >
-        <span>👨‍👦</span> لوحة متابعة ولي الأمر
-      </button>
     </div>
   );
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function WorldPage() {
   const router = useRouter();
@@ -288,7 +213,6 @@ export default function WorldPage() {
   const [selectedSubject, setSelectedSubject] = useState(GRADE2_CURRICULUM.subjects[0]);
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
   const [activeLesson, setActiveLesson] = useState<ReturnType<typeof getLesson>>(null);
-  const [showQR, setShowQR] = useState(false);
 
   useEffect(() => {
     const s = getStudent();
@@ -317,13 +241,13 @@ export default function WorldPage() {
       const unit = selectedSubject.units.find(u => u.id === unitId);
       const lesson = unit?.lessons.find(l => l.id === lessonId);
       setActiveLesson({
-        title: lesson?.title || "درس",
+        title: lesson?.title ?? "درس",
         subject: selectedSubject.ar,
         subjectColor: selectedSubject.color,
         icon: selectedSubject.icon,
-        xp: lesson?.xp || 20,
+        xp: lesson?.xp ?? 20,
         steps: [
-          { type: "intro", body: `مرحباً! سنتعلم اليوم: ${lesson?.title}` },
+          { type: "intro", body: `سنتعلم اليوم: ${lesson?.title}` },
           { type: "explain", title: lesson?.title, body: "سيتم إضافة محتوى هذا الدرس قريباً 🚀" },
           { type: "done" },
         ],
@@ -345,83 +269,55 @@ export default function WorldPage() {
     );
   }
 
+  const NAV_TABS = [
+    { id: "home",    icon: "🏠", label: "عالمي" },
+    { id: "journey", icon: "🗺️",  label: "رحلتي" },
+    { id: "awards",  icon: "🏆", label: "جوائزي" },
+    { id: "profile", icon: "👤", label: "ملفي" },
+  ];
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--cream)" }}>
-      {showQR && <QRModal onClose={() => setShowQR(false)} />}
 
-      {/* ── Side Rail ── */}
-      <aside
-        className="flex flex-col items-center gap-3 py-6 px-2 border-l flex-shrink-0"
-        style={{ background: "var(--cream-md)", borderColor: "var(--cream-dk)", width: 68 }}
-      >
+      {/* Side rail */}
+      <aside className="flex flex-col items-center gap-3 py-6 px-2 border-l flex-shrink-0"
+        style={{ background: "var(--cream-md)", borderColor: "var(--cream-dk)", width: 68 }}>
         <div className="text-2xl mb-1">🌟</div>
-
-        {(hasDiagnostic
-          ? [
-              { id: "home",    icon: "🏠", label: "الرئيسية" },
-              { id: "journey", icon: "🗺️",  label: "رحلتي" },
-              { id: "awards",  icon: "🏆", label: "جوائزي" },
-              { id: "profile", icon: "👤", label: "ملفي" },
-            ]
-          : [{ id: "home", icon: "🏠", label: "الرئيسية" }]
-        ).map(item => (
-          <button
-            key={item.id}
+        {(hasDiagnostic ? NAV_TABS : NAV_TABS.slice(0, 1)).map(item => (
+          <button key={item.id}
             onClick={() => setActiveTab(item.id as Tab)}
             title={item.label}
             className="flex flex-col items-center gap-1 rounded-2xl p-2 w-full transition-all"
             style={{
               background: activeTab === item.id ? "var(--primary)" : "transparent",
               color: activeTab === item.id ? "white" : "var(--text-muted)",
-            }}
-          >
+            }}>
             <span className="text-xl">{item.icon}</span>
             <span className="text-[9px] font-bold">{item.label}</span>
           </button>
         ))}
-
-        {hasDiagnostic && (
-          <div className="mt-auto">
-            <button
-              onClick={() => router.push("/parent")}
-              title="لوحة ولي الأمر"
-              className="flex flex-col items-center gap-1 rounded-2xl p-2 w-full"
-              style={{ color: "var(--text-muted)" }}
-            >
-              <span className="text-xl">👨‍👦</span>
-              <span className="text-[9px] font-bold">الأهل</span>
-            </button>
-          </div>
-        )}
       </aside>
 
-      {/* ── Main content ── */}
+      {/* Main */}
       <main className="flex-1 overflow-y-auto p-4">
 
-        {/* No diagnostic */}
         {!hasDiagnostic && (
-          <NeedsDiagnosticScreen
-            student={student}
-            onGo={() => router.push("/assessment")}
-          />
+          <NeedsDiagnostic student={student} onGo={() => router.push("/assessment")} />
         )}
 
-        {/* HOME */}
         {hasDiagnostic && activeTab === "home" && (
           <HomeTab
             student={student}
             onGoJourney={goJourney}
-            onShowQR={() => setShowQR(true)}
-            onGoParent={() => router.push("/parent")}
+            onStartMission={() => router.push("/lesson")}
           />
         )}
 
-        {/* JOURNEY */}
         {hasDiagnostic && activeTab === "journey" && (
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="flex items-center gap-3">
               <button onClick={() => setActiveTab("home")} className="text-2xl" style={{ color: "var(--text-muted)" }}>←</button>
-              <div className="text-3xl">{selectedSubject.icon}</div>
+              <span className="text-3xl">{selectedSubject.icon}</span>
               <div>
                 <h2 className="text-xl font-black">{selectedSubject.ar}</h2>
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>
@@ -432,15 +328,13 @@ export default function WorldPage() {
 
             <div className="flex gap-2 overflow-x-auto pb-1">
               {subjects.map(s => (
-                <button
-                  key={s.id}
+                <button key={s.id}
                   onClick={() => { setSelectedSubject(s); setSelectedUnit(null); }}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap"
                   style={{
                     background: selectedSubject.id === s.id ? s.color : "var(--cream-md)",
                     color: selectedSubject.id === s.id ? "white" : "var(--text-muted)",
-                  }}
-                >
+                  }}>
                   {s.icon} {s.ar}
                 </button>
               ))}
@@ -452,9 +346,9 @@ export default function WorldPage() {
                   <button
                     onClick={() => setSelectedUnit(selectedUnit === unit.id ? null : unit.id)}
                     className="w-full flex items-center gap-3 p-4 text-right"
-                    style={{ background: "var(--cream-md)" }}
-                  >
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center font-black text-white flex-shrink-0" style={{ background: selectedSubject.color }}>
+                    style={{ background: "var(--cream-md)" }}>
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center font-black text-white flex-shrink-0"
+                      style={{ background: selectedSubject.color }}>
                       {ui + 1}
                     </div>
                     <div className="flex-1">
@@ -471,10 +365,8 @@ export default function WorldPage() {
                         const hasContent = !!getLesson(selectedSubject.id, unit.id, lesson.id);
                         return (
                           <div key={lesson.id} className="flex items-center gap-3 px-4 py-3" style={{ background: "white" }}>
-                            <div
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0"
-                              style={{ background: isQuiz ? selectedSubject.color : "var(--cream-md)", color: isQuiz ? "white" : "var(--text-muted)" }}
-                            >
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0"
+                              style={{ background: isQuiz ? selectedSubject.color : "var(--cream-md)", color: isQuiz ? "white" : "var(--text-muted)" }}>
                               {isQuiz ? "🏆" : li + 1}
                             </div>
                             <div className="flex-1">
@@ -484,11 +376,9 @@ export default function WorldPage() {
                                 {hasContent && <span style={{ color: "#4FB286" }} className="font-bold">● متاح</span>}
                               </div>
                             </div>
-                            <button
-                              onClick={() => handleStartLesson(unit.id, lesson.id)}
+                            <button onClick={() => handleStartLesson(unit.id, lesson.id)}
                               className="px-3 py-1 rounded-full text-xs font-black text-white"
-                              style={{ background: selectedSubject.color }}
-                            >
+                              style={{ background: selectedSubject.color }}>
                               ابدأ
                             </button>
                           </div>
@@ -502,13 +392,13 @@ export default function WorldPage() {
           </div>
         )}
 
-        {/* AWARDS */}
         {hasDiagnostic && activeTab === "awards" && (
           <div className="max-w-2xl mx-auto space-y-4">
-            <h2 className="text-2xl font-black">إنجازاتي 🏆</h2>
+            <h2 className="text-2xl font-black">جوائزي 🏆</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {ACHIEVEMENTS.map(a => (
-                <div key={a.id} className="rounded-2xl p-4 text-center" style={{ background: "var(--cream-md)", opacity: a.unlocked ? 1 : 0.4 }}>
+                <div key={a.id} className="rounded-2xl p-4 text-center"
+                  style={{ background: "var(--cream-md)", opacity: a.unlocked ? 1 : 0.4 }}>
                   <div className="text-4xl mb-2">{a.icon}</div>
                   <div className="font-black text-sm mb-1">{a.title}</div>
                   <div className="text-xs" style={{ color: "var(--text-muted)" }}>{a.sub}</div>
@@ -519,7 +409,6 @@ export default function WorldPage() {
           </div>
         )}
 
-        {/* PROFILE */}
         {hasDiagnostic && activeTab === "profile" && (
           <div className="max-w-md mx-auto space-y-4">
             <div className="rounded-3xl p-6 text-center" style={{ background: "white" }}>
@@ -543,13 +432,11 @@ export default function WorldPage() {
             <button
               onClick={() => { localStorage.clear(); router.push("/"); }}
               className="w-full py-3 rounded-2xl text-sm font-bold"
-              style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}
-            >
+              style={{ background: "var(--cream-md)", color: "var(--text-muted)" }}>
               تسجيل خروج / حساب جديد
             </button>
           </div>
         )}
-
       </main>
     </div>
   );
